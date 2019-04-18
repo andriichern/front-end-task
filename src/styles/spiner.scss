@@ -1,0 +1,52 @@
+$border: 1.1em solid rgba(255, 151, 0, 0.2);
+$translate: translateZ(0);
+
+@mixin loader-base() {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;  
+}
+
+@mixin transform($value) {
+    -webkit-transform: rotate($value);
+    transform: rotate($value);
+}
+
+.loader {
+    @include loader-base();
+    margin: 60px auto;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: $border;
+    border-right: $border;
+    border-bottom: $border;
+    border-left: 1.1em solid #ff9700;
+    -webkit-transform: $translate;
+    -ms-transform: $translate;
+    transform: $translate;
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+
+    &:after {
+        @include loader-base();
+    }
+}
+
+@-webkit-keyframes load8 {
+    0% {
+        @include transform(0deg);
+    }
+    100% {
+        @include transform(360deg);
+    }
+}
+
+@keyframes load8 {
+    0% {
+        @include transform(0deg);
+    }
+    100% {
+        @include transform(360deg);
+    }
+}
