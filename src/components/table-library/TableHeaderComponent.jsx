@@ -1,19 +1,26 @@
 import React from 'react';
+import * as sortOrder from  '../../utils/sortingOrder';
 
-const TableHeader = ({ header, sorting, onclick }) => {
-    function getDirectionIcon(direction) {
-        if (!direction) {
+const TableHeader = ({ header, sorting: { key, order }, onclick }) => {
+    function getDirectionIcon() {
+        if (!order) {
             return '';
-        } else if (direction === 'asc') {
-            return 'caret down';
-        } else if (direction === 'desc') {
-            return 'caret up';
+        } else if (order === sortOrder.ASC) {
+            return 'down';
+        } else if (order === sortOrder.DESC) {
+            return 'up';
         }
     }
 
     return(
         <th>
-            <a href="#" className={getDirectionIcon(sorting)} onClick={onclick}>{header}</a>
+            <a 
+                href="#"                
+                onClick={onclick}
+            >
+                {header}
+                {key && key === header && <span className={"caret " + getDirectionIcon()}></span>}
+            </a>
         </th>
     );
 }
