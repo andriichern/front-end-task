@@ -2,25 +2,17 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './TableRowComponent.jsx';
 import TableHeader from './TableHeaderComponent.jsx';
-import TableSettings from './TableSettingsComponent.jsx';
 import sortData from '../../services/sortingService';
 import * as sortOrder from '../../utils/sortingOrder';
 
 const TableComponent = ({ headers, columns }) => {
-    const headerEntries = Object.entries(headers);
     const [sortSettings, setSortSettings] = useState({});
-    const [data, setColumnsData] = useState(columns);
-    const [showAll, setShowAll] = useState(false);
+    const [columnsData, setColumnsData] = useState(columns);
 
-    // useEffect(() => {
-    //     if (!sortSettings.key) {
-    //         sortSettings.key = Object.keys(columns[0])[0];
-    //         sortSettings.order = sortOrder.ASC;
+    useEffect(() => {
+        setColumnsData(columns)
+    }, [columns]);
 
-    //         setColumnsData(sortData(columns, sortSettings));
-    //     }
-    // }, [columns]);
-    
     function handleSort({ target: { text: key }}) {
         if (!sortSettings || sortSettings.key !== key) {
             sortSettings.key = key;
@@ -34,46 +26,36 @@ const TableComponent = ({ headers, columns }) => {
         }
         
         setSortSettings(sortSettings);
-        setColumnsData(sortData(data, sortSettings));
-    }
-
-    function handleShowAll () {
-        setShowAll(prevValue => {
-            return !prevValue;
-        })
-    }
+        setColumnsData(sortData(columnsData, sortSettings));
+    }    
 
     return(
-        <>
-            <TableSettings onChange={handleShowAll} />
-            <table className='table table-hover'>
-                <thead>
-                    <tr>
-                        {headerEntries.map( ([header, display], i) => (display || showAll) && 
-                            <TableHeader 
-                                key={i}
-                                header={header}
-                                sorting={sortSettings}
-                                onclick={handleSort} />
-                        )}
-                    </tr>
-                </thead>
-                <tbody>        
-                    {data.map((columnObj, i) => 
-                        <TableRow 
+        <table className='table table-hover'>
+            <thead>
+                <tr>
+                    {headers.map((header, i) =>
+                        <TableHeader 
                             key={i}
-                            rowData={columnObj}
-                            showAll={showAll}
-                            settings={headerEntries} />
+                            header={header}
+                            sorting={sortSettings}
+                            onclick={handleSort} />
                     )}
-                </tbody>
-            </table>
-        </>
+                </tr>
+            </thead>
+            <tbody>        
+                {columnsData.map((columnObj, i) => 
+                    <TableRow 
+                        key={i}
+                        rowData={columnObj}
+                        dataKeys={headers} />
+                )}
+            </tbody>
+        </table>
     );
 }
 
 TableComponent.propTypes = {
-    headers: PropTypes.object.isRequired,
+    headers: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
 };
 

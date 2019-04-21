@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import reports from './reportsReducer';
 import headers from './headersReducer';
+import reports from './reportsReducer';
 
-const rootReducer = combineReducers({
-	reports,
-	headers
+export const rootReducer = combineReducers({
+	headers,
+	reports
 });
 
 export default rootReducer;

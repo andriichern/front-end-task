@@ -1,27 +1,13 @@
 import React from 'react';
+import ShowAll from '../common/ShowAllComponent.jsx';
+import Filter from '../common/FilterComponent.jsx';
 
-/* <div className="input-group">
-    <div className="input-group-prepend">
-        <div className="input-group-text">
-            <input type="checkbox" aria-label="Show All Columns checkbox" />
-        </div>
-    </div>
-    <label>Show All Columns</label>
-</div> */
-
-const TableSettings = ({ onChange }) => {
+const TableSettings = ({ headers, onShowAll, onFilter }) => {
     return(
-        <div className="form-group form-check">
-            <input 
-                id="showAll"
-                type="checkbox"
-                aria-label="Show All Columns checkbox"
-                className="form-check-input" 
-                onChange={onChange} />
-            <label
-                className="form-check-label"
-                htmlFor="showAll">Show All Columns</label>
-        </div>        
+        <>
+            <Filter headers={headers} onFilter={onFilter} />
+            <ShowAll onChange={onShowAll} />
+        </>
     );
 };
 
