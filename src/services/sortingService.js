@@ -6,108 +6,64 @@ export default function sortData(data, { key, order }) {
         return;
     }
 
-    const keyDataValue = data[0][key];
+    const keyDataValue = getDataKeyVale(data, key);
     const handler = getSortHandler(keyDataValue, key, order);
     return data.concat().sort(handler);
 }
 
-function getdataKeyVale(data, key) {
+function getDataKeyVale(data, key) {
     for (let i = 0; i < data.length; i++) {
         const currentValue = data[i][key];
+        if (currentValue !== null && currentValue !== undefined) {
+            return currentValue;
+        }
     }
 }
 
 function getSortHandler(value, key, order) {
     const type = dataType.getDataType(value);
-    const isDate = dataType.isOfDateType(value);    
 
-    if (isDate && type === dataType.STRING) {
-        return dateSortingHandler(key, order);
-    } else if (type === dataType.NUMBER) {
-        return numberSortingHandler(key, order);
-    } else /*if (type === dataType.STRING)*/ {
-        return stringSortingHandler(key, order);
+    if (type === dataType.DATE || type === dataType.NUMBER) {
+        return dateAndNumberSortHandler(type, key, order);
     }
-    //return booleanSortingHandler(key. order);
+
+    return stringAndBooleanSortHandler(type, key, order)
 }
 
-function dateSortingHandler(key, order) {
-    const sortKey = key;
+function dateAndNumberSortHandler(type, key, order) {
+    return function (first, second) {
+        const [fSort, sSort] = prepareSortValues(first, second, type, key);
 
-    if (order === sortOrder.ASC) {
-        return function(prev, next) {
-            const prevDate = new Date(prev[sortKey]);
-            const nextDate = new Date(next[sortKey]);
-            
-            return prevDate - nextDate;
+        if (order === sortOrder.ASC) {
+            return fSort - sSort;        
         }
-    }
 
-    return function(prev, next) {
-        const prevDate = new Date(prev[sortKey]);
-        const nextDate = new Date(next[sortKey]);
-        
-        return nextDate - prevDate;
+        return sSort - fSort;
     }
 }
 
-function numberSortingHandler(key, order) {
-    let sortKey = key;
-    
-    if (order === sortOrder.ASC) {
-        return function (prev, next) {
-            return prev[sortKey] - next[sortKey];
-        }
-    }
-    
-    return function (prev, next) {
-        return next[sortKey] - prev[sortKey];
-    }
-}
+function stringAndBooleanSortHandler(type, key, order) {
+    return function(first, second) {
+        const [fSort, sSort] = prepareSortValues(first, second, type, key);
 
-function stringSortingHandler(key, order) {
-    let sortKey = key;
-
-    if (order === sortOrder.ASC) {
-        return function(prev, next) {
-            const prevString = prev[sortKey].toLowerCase();
-            const nextString = next[sortKey].toLowerCase();
-
-            if (prevString < nextString) {
-                return -1;
-            }
-
-            if (prevString > nextString) {
-                return 1;
-            }
-
+        if (fSort === sSort) {
             return 0;
         }
-    }
 
-    return function(prev, next) {
-        const prevString = prev[sortKey].toLowerCase();
-        const nextString = next[sortKey].toLowerCase();
-
-        if (prevString > nextString) {
+        if (order === sortOrder.ASC && fSort < sSort || 
+            order === sortOrder.DESC && fSort > sSort) {
             return -1;
-        }
-
-        if (prevString < nextString) {
-            return 1;
-        }
-
-        return 0;
+        } 
+        
+        return 1;
     }
 }
 
-// function booleanSortingHandler(key, order) {
-//     let sortKey = key;
+function prepareSortValues(firstObj, secondObj, type, key) {
+    const fValue = firstObj[key];
+    const sValue = secondObj[key];
+    const fPrepared = fValue === undefined ? dataType.getDefaultTypeValue(type) : dataType.transformValue(fValue, type);
+    const sPrepared = sValue === undefined ? dataType.getDefaultTypeValue(type) : dataType.transformValue(sValue, type);
 
-//     if (order === sortOrder.ASC) {
-//         return function(prev, next) {
-//             if (prev[sortKey] && !next[sortKey])
-//             return 
-//         }
-//     }
-// }
+    return [fPrepared, sPrepared];
+}

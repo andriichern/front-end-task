@@ -6,20 +6,20 @@ const TableHeader = ({ header, sorting: { key, order }, onclick }) => {
         if (!order) {
             return '';
         } else if (order === sortOrder.ASC) {
-            return 'down';
+            return 'caret down';
         } else if (order === sortOrder.DESC) {
-            return 'up';
+            return 'caret up';
         }
     }
 
     return(
         <th>
             <a 
-                href="#"                
+                href="#"
                 onClick={onclick}
             >
                 {header}
-                {key && key === header && <span className={"caret " + getDirectionIcon()}></span>}
+                {key && key === header && <span className={getDirectionIcon()}></span>}
             </a>
         </th>
     );

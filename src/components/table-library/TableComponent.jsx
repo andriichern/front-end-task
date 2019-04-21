@@ -6,19 +6,18 @@ import sortData from '../../services/sortingService';
 import * as sortOrder from '../../utils/sortingOrder';
 
 const TableComponent = ({ headers, columns }) => {
-    //let sortSettings = {};
     const headerEntries = Object.entries(headers);
     const [sortSettings, setSortSettings] = useState({});
-    const [data, setColumnsData] = useState([]);
+    const [data, setColumnsData] = useState(columns);
 
-    useEffect(() => {
-        if (!sortSettings.key) {
-            sortSettings.key = Object.keys(columns[0])[0];
-            sortSettings.order = sortOrder.ASC;
+    // useEffect(() => {
+    //     if (!sortSettings.key) {
+    //         sortSettings.key = Object.keys(columns[0])[0];
+    //         sortSettings.order = sortOrder.ASC;
 
-            setColumnsData(sortData(columns, sortSettings));
-        }
-    }, [columns]);
+    //         setColumnsData(sortData(columns, sortSettings));
+    //     }
+    // }, [columns]);
     
     function handleHeaderClick({ target: { text: key }}) {
         if (!sortSettings || sortSettings.key !== key) {
