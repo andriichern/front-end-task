@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './TableRowComponent.jsx';
 import TableHeader from './TableHeaderComponent.jsx';
+import TableSettings from './TableSettingsComponent.jsx';
 import sortData from '../../services/sortingService';
 import * as sortOrder from '../../utils/sortingOrder';
 
@@ -9,6 +10,7 @@ const TableComponent = ({ headers, columns }) => {
     const headerEntries = Object.entries(headers);
     const [sortSettings, setSortSettings] = useState({});
     const [data, setColumnsData] = useState(columns);
+    const [showAll, setShowAll] = useState(false);
 
     // useEffect(() => {
     //     if (!sortSettings.key) {
@@ -19,7 +21,7 @@ const TableComponent = ({ headers, columns }) => {
     //     }
     // }, [columns]);
     
-    function handleHeaderClick({ target: { text: key }}) {
+    function handleSort({ target: { text: key }}) {
         if (!sortSettings || sortSettings.key !== key) {
             sortSettings.key = key;
             sortSettings.order = sortOrder.ASC;
@@ -33,25 +35,40 @@ const TableComponent = ({ headers, columns }) => {
         
         setSortSettings(sortSettings);
         setColumnsData(sortData(data, sortSettings));
-    }    
+    }
+
+    function handleShowAll () {
+        setShowAll(prevValue => {
+            return !prevValue;
+        })
+    }
 
     return(
-        <table className='table table-hover'>
-            <thead>
-                <tr>
-                    {headerEntries.map( ([header, display], i) => display && 
-                        <TableHeader 
+        <>
+            <TableSettings onChange={handleShowAll} />
+            <table className='table table-hover'>
+                <thead>
+                    <tr>
+                        {headerEntries.map( ([header, display], i) => (display || showAll) && 
+                            <TableHeader 
+                                key={i}
+                                header={header}
+                                sorting={sortSettings}
+                                onclick={handleSort} />
+                        )}
+                    </tr>
+                </thead>
+                <tbody>        
+                    {data.map((columnObj, i) => 
+                        <TableRow 
                             key={i}
-                            header={header}
-                            sorting={sortSettings}
-                            onclick={handleHeaderClick} />
+                            rowData={columnObj}
+                            showAll={showAll}
+                            settings={headerEntries} />
                     )}
-                </tr>
-            </thead>
-            <tbody>        
-                {data.map((columnObj, i) => <TableRow key={i} rowData={columnObj} settings={headerEntries} />)}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </>
     );
 }
 

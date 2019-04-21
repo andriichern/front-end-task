@@ -1,10 +1,10 @@
 import React from 'react';
 import TableCell from './TableCellComponent.jsx';
 
-const TableRow = ({ rowData, settings }) => {
+const TableRow = ({ rowData, showAll, settings }) => {
     return (
         <tr>
-            {settings.map( ([propName, display], i) => display && <TableCell key={i} value={rowData[propName]}/> )}
+            {settings.map( ([propName, display], i) => (display || showAll) && <TableCell key={i} value={rowData[propName]}/> )}
         </tr>
     );
 };
