@@ -29,11 +29,11 @@ export function filterData(data, types, options) {
 
 function getFilterHandler(type, key, operator, criteria) {
     const operations = {
-        [operators.LT]: entry => { return entry[key] && (toDateIfNedded(type, entry[key]) < criteria); },
-        [operators.GT]: entry => { return entry[key] && (toDateIfNedded(type, entry[key]) > criteria); },
-        [operators.EQ]: entry => { return entry[key] && (toDateIfNedded(type, entry[key]) === criteria); },
-        [operators.LTE]: entry => { return entry[key] && (toDateIfNedded(type, entry[key]) <= criteria); },
-        [operators.GTE]: entry => { return entry[key] && (toDateIfNedded(type, entry[key]) >= criteria); },
+        [operators.LT]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) < criteria; },
+        [operators.GT]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) > criteria; },
+        [operators.EQ]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) === criteria; },
+        [operators.LTE]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) <= criteria; },
+        [operators.GTE]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) >= criteria; },
         [operators.CONTAINS]: entry => { return entry[key] && entry[key].includes(criteria); }
     };
 
@@ -49,11 +49,17 @@ function getTypedCriteria(type, criteria) {
         return new Date(criteria);
     }
 
+    if (type === types.BOOLEAN) {
+        return criteria === 'true' ? true : false;
+    }
+
     return criteria;
 }
 
-function toDateIfNedded(type, value) {
+function toDateIfNeeded(type, value) {
     if (type === types.DATE) {
         return new Date(value);
     }
+
+    return value;
 }
