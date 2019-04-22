@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import * as reportActions from '../../store/actions/reportsActions';
+import * as filters from '../../services/filterService';
 import Spinner from '../common/Spinner.jsx'
 import TableComponent from './TableComponent.jsx';
 import TableSettings from './TableSettingsComponent.jsx';
 
-const TableLibraryPage = ({ headers, reports, ...props }) => {
+const TableLibraryPage = ({ types, headers, reports, ...props }) => {
+	const headerEntries = Object.entries(headers);
 	const [filter, setFilter] = useState({});
 	const [showAll, setShowAll] = useState(false);
 	const [tableHeaders, setTableHeaders] = useState([]);
@@ -19,13 +21,15 @@ const TableLibraryPage = ({ headers, reports, ...props }) => {
 
 	useEffect(() => {
 		if (hasData()) {
-			filterHeaders();			
+			const filteredHeaders = filters.filterHeaders(headerEntries, showAll);
+			setTableHeaders(filteredHeaders);			
 		}		
 	}, [showAll, headers]);
 
 	useEffect(() => {
 		if (hasData()) {
-			filterData();
+			const filteredData = filters.filterData(reports, types, filter);
+			setTableData(filteredData);
 		}
 	}, [reports, filter]);
 
@@ -33,28 +37,6 @@ const TableLibraryPage = ({ headers, reports, ...props }) => {
 		return reports.length !== 0;
 	}
 	
-	function filterHeaders() {
-		let filtered = [];
-		const headerEntries = Object.entries(headers);
-		headerEntries.map(([key, display]) => {
-			if (display || showAll) {
-				filtered.push(key);
-			}
-		})
-		setTableHeaders(filtered);
-	}
-	
-	function filterData() {
-		const { key, text } = filter;
-		let result;
-		if (key && text) {
-			result = reports.filter(report => report[key] && report[key].includes(text));
-		} else {
-			result = reports;
-		}
-		setTableData(result);
-	}
-
 	function handleFilter(filter) {
 		setFilter(filter);
 	}
@@ -84,6 +66,7 @@ const TableLibraryPage = ({ headers, reports, ...props }) => {
 
 function mapStateToProps(state) {
 	return {
+		types: state.types,
 		headers: state.headers,
 		reports: state.reports
 	}
