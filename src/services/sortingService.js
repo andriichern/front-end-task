@@ -1,28 +1,17 @@
 import * as sortOrder from  '../utils/sortingOrder';
 import * as dataType from '../utils/dataTypes';
 
-export default function sortData(data, { key, order }) {
+export default function sortData(data, types, { key, order }) {
     if (!data || data.length === 0) {
         return;
     }
 
-    const keyDataValue = getDataKeyVale(data, key);
+    const keyDataValue = types[key];
     const handler = getSortHandler(keyDataValue, key, order);
     return data.concat().sort(handler);
 }
 
-function getDataKeyVale(data, key) {
-    for (let i = 0; i < data.length; i++) {
-        const currentValue = data[i][key];
-        if (currentValue !== null && currentValue !== undefined) {
-            return currentValue;
-        }
-    }
-}
-
-function getSortHandler(value, key, order) {
-    const type = dataType.getDataType(value);
-
+function getSortHandler(type, key, order) {
     if (type === dataType.DATE || type === dataType.NUMBER) {
         return dateAndNumberSortHandler(type, key, order);
     }

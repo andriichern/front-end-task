@@ -1,7 +1,8 @@
 import * as actions from '../actionTypes';
+import { loadTypesSuccess } from './typesActions';
 import { loadHeadersSuccess } from './headersActions';
 import * as reportService from '../../services/reportService';
-import { getReportKeysForHeader } from '../../services/reportKeysService'
+import { getReportKeysAndTypes } from '../../services/reportKeysService'
 
 export function loadReports100() {
 	return function (dispatch) {
@@ -28,8 +29,9 @@ function loadReportsSuccess(reports) {
 function loadReports(dispatch, count) {
 	const method = `getReports${count}`;
 	const reports = reportService[method]();
-	const headers = getReportKeysForHeader(reports);
+	const [headers, types] = getReportKeysAndTypes(reports);
 
+	dispatch(loadTypesSuccess(types));
 	dispatch(loadHeadersSuccess(headers));
 	dispatch(loadReportsSuccess(reports));
 }

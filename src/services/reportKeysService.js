@@ -1,33 +1,40 @@
-export function getReportKeysForHeader(data) {
+import { getDataType } from '../utils/dataTypes';
+
+export function getReportKeysAndTypes(data) {
 	if (!data) {
 		return;
 	}
 
-	let dataKeys = countKeys(data);
-
-	return mapKeysToDisplay(dataKeys, data.length);
+	let [dataKeys, dataTypes] = countKeys(data);
+	dataKeys = mapKeysToDisplayAndType(dataKeys, data.length);
+	return [dataKeys, dataTypes];
 }
 
 function countKeys(data) {
-	let result = {};
+	let keysCount = {};
+	let keysType = {};
 
 	for (let i = 0; i < data.length; i++) {
 		const currentItem = data[i];
 		const entries = Object.entries(currentItem);
 
-		for (let [key] of entries) {
-			if (result[key]) {
-				result[key] = result[key] + 1
+		for (let [key, value] of entries) {
+			if (keysCount[key]) {
+				keysCount[key] = keysCount[key] + 1
 			} else {
-				result[key] = 1;
+				keysCount[key] = 1;
+			}
+
+			if (!keysType[key]) {
+				keysType[key] = getDataType(value);
 			}
 		}
 	}
 
-	return result;
+	return [keysCount, keysType];
 }
 
-function mapKeysToDisplay(keys, dataLength) {
+function mapKeysToDisplayAndType(keys, dataLength) {
 	const minUsageLimit = 20;
 	let keyEntries = Object.entries(keys);
 
