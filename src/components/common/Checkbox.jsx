@@ -1,8 +1,12 @@
 import React from 'react';
 
-const ShowAll = ({ onChange }) => {
+const Checkbox = ({
+    label,
+    classList='',
+    onChange
+}) => {
     return(
-        <div className="form-group form-check">
+        <div className={`form-group form-check ${classList}`}>
             <input 
                 id="showAll"
                 type="checkbox"
@@ -11,9 +15,9 @@ const ShowAll = ({ onChange }) => {
                 onChange={onChange} />
             <label
                 className="form-check-label"
-                htmlFor="showAll">Show All Columns</label>
+                htmlFor="showAll">{label}</label>
         </div>
     );
 };
 
-export default ShowAll;
+export default Checkbox;

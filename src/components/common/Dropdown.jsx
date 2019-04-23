@@ -1,18 +1,25 @@
 import React from 'react';
 
-const Dropdown = ({ label, buttonStyle, content, selected, values, onItemSelect }) => {
+const Dropdown = ({
+    label,
+    btnTypeClass,
+    content,
+    selected,
+    values,
+    onItemSelect
+}) => {
     return(
         <div className="dropdown">
-            <button type="button" id={'dropdown' + content} className={`btn btn-${buttonStyle} dropdown-toggle`} 
+            <button type="button" id={`dropdown${content}`} className={`btn btn-${btnTypeClass} dropdown-toggle`} 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {selected || label}
             </button>
-            <div className="dropdown-menu" aria-labelledby={'dropdown' + content}>
+            <div className="dropdown-menu" aria-labelledby={`dropdown${content}`}>
                 {values.map((value, i) => 
                     <a
                         key={i}
                         href="#"
-                        className={"dropdown-item" + (selected === value ? ' active' : '')}
+                        className={"dropdown-item" + (selected === value ? " active" : "")}
                         onClick={onItemSelect}>{value}</a>
                 )}
             </div>

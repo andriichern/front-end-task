@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import TableRow from './TableRowComponent.jsx';
-import TableHeader from './TableHeaderComponent.jsx';
+import TableRow from './TableRow.jsx';
+import TableHeader from './TableHeader.jsx';
 import sortData from '../../services/sortingService';
 import * as sortOrder from '../../utils/sortingOrder';
 
-const TableComponent = ({ types, headers, columns }) => {
+const TableComponent = ({
+    types,
+    headers,
+    columns,
+    shouldReplaceEmpty
+}) => {
     const [sortSettings, setSortSettings] = useState({});
     const [columnsData, setColumnsData] = useState(columns);
 
     useEffect(() => {
-        setColumnsData(columns)
+        setColumnsData(columns);
     }, [columns]);
 
     function handleSort({ target: { text: key }}) {
@@ -48,7 +53,8 @@ const TableComponent = ({ types, headers, columns }) => {
                     <TableRow 
                         key={i}
                         rowData={columnObj}
-                        dataKeys={headers} />
+                        dataKeys={headers}
+                        replaceEmptyValues={shouldReplaceEmpty} />
                 )}
             </tbody>
         </table>

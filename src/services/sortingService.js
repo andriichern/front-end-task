@@ -1,5 +1,5 @@
 import * as sortOrder from  '../utils/sortingOrder';
-import * as dataType from '../utils/dataTypes';
+import { DATE, NUMBER, getDefaultTypeValue, transformValue } from '../utils/dataTypes';
 
 export default function sortData(data, types, { key, order }) {
     if (!data || data.length === 0) {
@@ -12,7 +12,7 @@ export default function sortData(data, types, { key, order }) {
 }
 
 function getSortHandler(type, key, order) {
-    if (type === dataType.DATE || type === dataType.NUMBER) {
+    if (type === DATE || type === NUMBER) {
         return dateAndNumberSortHandler(type, key, order);
     }
 
@@ -51,8 +51,8 @@ function stringAndBooleanSortHandler(type, key, order) {
 function prepareSortValues(firstObj, secondObj, type, key) {
     const fValue = firstObj[key];
     const sValue = secondObj[key];
-    const fPrepared = fValue === undefined ? dataType.getDefaultTypeValue(type) : dataType.transformValue(fValue, type);
-    const sPrepared = sValue === undefined ? dataType.getDefaultTypeValue(type) : dataType.transformValue(sValue, type);
+    const fPrepared = fValue === undefined ? getDefaultTypeValue(type) : transformValue(fValue, type);
+    const sPrepared = sValue === undefined ? getDefaultTypeValue(type) : transformValue(sValue, type);
 
     return [fPrepared, sPrepared];
 }

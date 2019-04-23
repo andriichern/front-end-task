@@ -1,13 +1,13 @@
 import React from 'react';
 
-const TableCell = ({ value }) => {
+const TableCell = ({ value, replaceEmptyValue }) => {
 
     function getValueFormat(val) {
         if (!!val === val) {
             return val ? 'Yes' : 'No';
         }
 
-        if (!val) {
+        if (!val && replaceEmptyValue) {
             return ' --- ';
         }
 

@@ -1,7 +1,11 @@
 import React from 'react';
 import * as sortOrder from  '../../utils/sortingOrder';
 
-const TableHeader = ({ header, sorting: { key, order }, onclick }) => {
+const TableHeader = ({
+    header,
+    sorting: { key, order },
+    onclick
+}) => {
     function getDirectionIcon() {
         if (!order) {
             return '';

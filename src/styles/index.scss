@@ -29,8 +29,22 @@ html {
 }
 
 .dataformat-row {
+    margin-bottom: 15px;
     .dropdown {
         display: inline-block;
         margin-right: 10px;
     }
+}
+
+.flex-checkbox-center {
+    align-self: center;
+
+    .form-check-input {
+        margin-top: .4rem;
+    }
+}
+
+.table-settings-container {
+    justify-content: space-between;
+    margin-bottom: 10px;
 }

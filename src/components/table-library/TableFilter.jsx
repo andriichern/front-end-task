@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import operators from '../../utils/filterOperators';
-import Dropdown from './DropdownComponent.jsx';
+import Dropdown from '../common/Dropdown.jsx';
+import Button from '../common/Button.jsx';
 
-const Filter = ({ headers, onFilter }) => {
+const TableFilter = ({ headers, onFilter }) => {
     const [key, setFilterKey] = useState('');
     const [operator, setFilterOperator] = useState('');
     const [criteria, setFilterCriteria] = useState('');
@@ -34,16 +35,16 @@ const Filter = ({ headers, onFilter }) => {
         <div className="input-group">
             <div className="input-group-prepend">
                 <Dropdown
-                    label='Filter By'
-                    buttonStyle='outline-info'
-                    content='filterKey'
+                    label="Filter By"
+                    btnTypeClass="outline-info"
+                    content="FilterKey"
                     selected={key}
                     values={headers}
                     onItemSelect={onFilterKeySelect} />
                 <Dropdown
-                    label='Operator'
-                    buttonStyle='outline-info'
-                    content='filterOperator'
+                    label="Operator"
+                    btnTypeClass="outline-info"
+                    content="FilterOperator"
                     selected={operator}
                     values={operators}
                     onItemSelect={onFilterOperatorSelect} />
@@ -56,17 +57,17 @@ const Filter = ({ headers, onFilter }) => {
                 value={criteria}
                 onChange={onInputChange} />
             <div className="input-group-append">
-                <button 
-                    className="btn btn-outline-secondary" 
-                    type="button"
-                    onClick={onClearClick}>Clear</button>
-                <button 
-                    className="btn btn-outline-success"
-                    type="button"
-                    onClick={onFilterClick}>Filter</button>                
+                <Button
+                    btnTypeClass="outline-secondary"
+                    label="Clear"
+                    onClick={onClearClick} />
+                <Button
+                    btnTypeClass="outline-success"
+                    label="Apply"
+                    onClick={onFilterClick} />                
             </div>
         </div>
     );
 };
 
-export default Filter;
+export default TableFilter;

@@ -1,4 +1,4 @@
-import * as types from '../utils/dataTypes';
+import { DATE, NUMBER, BOOLEAN } from '../utils/dataTypes';
 import * as operators from '../utils/filterOperators';
 
 export function filterHeaders(headerEntries, showAll) {
@@ -41,15 +41,15 @@ function getFilterHandler(type, key, operator, criteria) {
 }
 
 function getTypedCriteria(type, criteria) {
-    if (type === types.NUMBER) {
+    if (type === NUMBER) {
         return +criteria;
     }
 
-    if (type === types.DATE) {
+    if (type === DATE) {
         return new Date(criteria);
     }
 
-    if (type === types.BOOLEAN) {
+    if (type === BOOLEAN) {
         return criteria === 'true' ? true : false;
     }
 
@@ -57,7 +57,7 @@ function getTypedCriteria(type, criteria) {
 }
 
 function toDateIfNeeded(type, value) {
-    if (type === types.DATE) {
+    if (type === DATE) {
         return new Date(value);
     }
 

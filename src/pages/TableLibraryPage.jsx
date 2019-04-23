@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import * as reportActions from '../../store/actions/reportsActions';
-import * as filters from '../../services/filterService';
-import Spinner from '../common/Spinner.jsx'
-import TableComponent from './TableComponent.jsx';
-import TableSettings from './TableSettingsComponent.jsx';
+import * as reportActions from '../store/actions/reportsActions';
+import * as filters from '../services/filterService';
+import Spinner from '../components/common/Spinner.jsx'
+import TableComponent from '../components/table-library/Table.jsx';
+import TableSettings from '../components/table-library/TableSettings.jsx';
 
 const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	const headerEntries = Object.entries(headers);
 	const [filter, setFilter] = useState({});
 	const [showAll, setShowAll] = useState(false);
-	const [tableHeaders, setTableHeaders] = useState([]);
 	const [tableData, setTableData] = useState([]);
+	const [tableHeaders, setTableHeaders] = useState([]);
+	const [formatSettings, setFormatSettings] = useState({});
+	const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
 
 	useEffect(() => {
         if (!hasData()) {
@@ -31,35 +33,48 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 			const filteredData = filters.filterData(reports, types, filter);
 			setTableData(filteredData);
 		}
-	}, [reports, filter]);
+	}, [reports, filter, shouldReplaceEmpty]);
 
 	function hasData() {
 		return reports.length !== 0;
 	}
 	
-	function handleFilter(filter) {
-		setFilter(filter);
+	function handleFormatAdded(settings) {
+        if (settings.type && settings.format) {
+			setFormatSettings(settings);
+        }
 	}
-
-	function handleShowAll () {
+	
+	function handleShowAll() {
         setShowAll(prevValue => {
 			return !prevValue;			
 		});
 	}
 
+	function handleReplaceEmpty() {
+		setShouldReplaceEmpty(prevValue => {
+			return !prevValue;
+		})
+	}
+
+	function handleFilter(filter) {
+		setFilter(filter);
+	}	
+
 	return (
 		<>
-		{!hasData() 
-			? (<Spinner />) 
-			: (<>
-				<TableSettings
+			<TableSettings
+				headers={tableHeaders}
+				onFilter={handleFilter}
+				onShowAll={handleShowAll}
+				onFormat={handleFormatAdded}
+				onReplaceEmpty={handleReplaceEmpty} />
+			{!hasData() 
+				? (<Spinner />)
+				: (<TableComponent
 					headers={tableHeaders}
-					onShowAll={handleShowAll}
-					onFilter={handleFilter} />
-				<TableComponent 
-					headers={tableHeaders}
-					columns={tableData} />
-			</>)}
+					columns={tableData}
+					shouldReplaceEmpty={shouldReplaceEmpty} />)}
 		</>
 	);
 }
