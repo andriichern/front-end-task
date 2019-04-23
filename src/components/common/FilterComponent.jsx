@@ -35,14 +35,14 @@ const Filter = ({ headers, onFilter }) => {
             <div className="input-group-prepend">
                 <Dropdown
                     label='Filter By'
-                    buttonStyle='info'
+                    buttonStyle='outline-info'
                     content='filterKey'
                     selected={key}
                     values={headers}
                     onItemSelect={onFilterKeySelect} />
                 <Dropdown
                     label='Operator'
-                    buttonStyle='info'
+                    buttonStyle='outline-info'
                     content='filterOperator'
                     selected={operator}
                     values={operators}

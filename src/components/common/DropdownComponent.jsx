@@ -3,7 +3,7 @@ import React from 'react';
 const Dropdown = ({ label, buttonStyle, content, selected, values, onItemSelect }) => {
     return(
         <div className="dropdown">
-            <button type="button" id={'dropdown' + content} className={`btn btn-outline-${buttonStyle} dropdown-toggle`} 
+            <button type="button" id={'dropdown' + content} className={`btn btn-${buttonStyle} dropdown-toggle`} 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {selected || label}
             </button>
