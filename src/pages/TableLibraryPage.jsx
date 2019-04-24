@@ -30,12 +30,18 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	}, [showAll, headers]);
 
 	useEffect(() => {
-		if (hasData()) {
-			const formatted = formatData(reports, types, formatSettings)
-			const filteredData = filters.filterData(formatted, types, filter);
-			setTableData(filteredData);
+		if (hasData() && tableData.length === 0) {
+			formatAndFilterData(reports, formatSettings);
+		} else if (tableData.length > 0){
+			formatAndFilterData(tableData, formatSettings);
 		}
 	}, [reports, filter, formatSettings, shouldReplaceEmpty]);
+
+	function formatAndFilterData(data, settings) {
+		const formatted = formatData(data, types, settings)
+		const filteredData = filters.filterData(formatted, types, filter);
+		setTableData(filteredData);
+	}
 
 	function hasData() {
 		return reports.length !== 0;
@@ -45,6 +51,11 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
         if (settings.type && settings.format) {
 			setFormatSettings(settings);			
         }
+	}
+
+	function handleClearAllFormatting() {
+		setFormatSettings({});
+		formatAndFilterData(reports);
 	}
 	
 	function handleShowAll() {
@@ -70,6 +81,7 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 				onFilter={handleFilter}
 				onShowAll={handleShowAll}
 				onFormat={handleFormatAdded}
+				onFormatClear={handleClearAllFormatting}
 				onReplaceEmpty={handleReplaceEmpty} />
 			{!hasData() 
 				? (<Spinner />)

@@ -1,6 +1,5 @@
 import { DATE, STRING, NUMBER, BOOLEAN } from '../utils/dataTypes';
 
-export const AsIsFormat = 'As Is';
 const DateFormat = 'Date value';
 const TimeFormat = 'Time value';
 const UTCDateFormat = 'UTC Format';
@@ -16,7 +15,6 @@ const moneyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 const typeFormatters = {
-    [AsIsFormat]: value => { return value; },
     [DateFormat]: value => { return new Date(value).toDateString(); },
     [TimeFormat]: value => { return new Date(value).toTimeString(); },
     [UTCDateFormat]: value => { return new Date(value).toUTCString(); },
@@ -31,15 +29,19 @@ const typeFormatters = {
 };
 
 export const typeFormatOptions = {
-    [DATE]: [AsIsFormat, DateFormat, TimeFormat, UTCDateFormat],
-    [STRING]: [AsIsFormat, UpperStringFormat, LowerStringFormat, CapitalStrongFormat],
-    [NUMBER]: [AsIsFormat, MoneyFormat],
-    [BOOLEAN]: [AsIsFormat, ReplaceBooleanFormat]
+    [DATE]: [DateFormat, TimeFormat, UTCDateFormat],
+    [STRING]: [UpperStringFormat, LowerStringFormat, CapitalStrongFormat],
+    [NUMBER]: [MoneyFormat],
+    [BOOLEAN]: [ReplaceBooleanFormat]
 };
 
 export function formatData(data, types, formatOptions) {
     if (!data || !data.length) {
         return;
+    }
+
+    if (!formatOptions || !formatOptions.type || !formatOptions.format) {
+        return data;
     }
 
     let result = [];

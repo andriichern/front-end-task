@@ -30,6 +30,11 @@ html {
 
 .dataformat-row {
     margin-bottom: 15px;
+    
+    & > .btn {
+        margin-right: 10px;
+    }
+
     .dropdown {
         display: inline-block;
         margin-right: 10px;

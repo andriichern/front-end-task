@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import Button from '../common/Button.jsx';
 import Dropdown from '../common/Dropdown.jsx';
 import { allTypes } from '../../utils/dataTypes';
-import { typeFormatOptions, AsIsFormat } from '../../services/formatService';
+import { typeFormatOptions } from '../../services/formatService';
 
-const TableDataFormat = ({ onFormat }) => {
+const TableDataFormat = ({ onFormat, onClearAll }) => {
     const [type, setType] = useState('');
-    const [format, setFormat] = useState(AsIsFormat);
+    const [format, setFormat] = useState('');
+    const [formatApplied, setFormatApplied] = useState(false);
     
     function onTypeSelected({ target: { text }}) {
         setType(text);
-        setFormat(AsIsFormat);
+        setFormat('');
     }
 
     function onTypeFormatSelected({ target: { text }}) {
@@ -19,6 +20,14 @@ const TableDataFormat = ({ onFormat }) => {
 
     function onFormatApplied() {
         onFormat({ type, format });
+        setFormatApplied(true);
+    }
+
+    function onClearAllBtn() {
+        setType('');
+        setFormat('');
+        setFormatApplied(false);
+        onClearAll();
     }
 
     return(
@@ -45,6 +54,10 @@ const TableDataFormat = ({ onFormat }) => {
                     label="Apply"
                     onClick={onFormatApplied} />
             }
+            {formatApplied && <Button
+                btnTypeClass="danger"
+                label="Clear All"
+                onClick={onClearAllBtn} />}
         </div>
     );
 };

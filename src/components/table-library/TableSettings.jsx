@@ -6,13 +6,14 @@ import TableDataFormat from './TableDataFormat.jsx';
 const TableSettings = ({
     headers,
     onFormat,
+    onFormatClear,
     onReplaceEmpty,
     onShowAll,
     onFilter
 }) => {
     return(
         <div className="row table-settings-container">
-            <TableDataFormat onFormat={onFormat} />
+            <TableDataFormat onFormat={onFormat} onClearAll={onFormatClear} />
             <Checkbox 
                 label="Replace Empty Values"
                 classList="flex-checkbox-center"
