@@ -4,7 +4,7 @@ const TableCell = ({ value, replaceEmptyValue }) => {
 
     function getValueFormat(val) {
         if (!!val === val) {
-            return val ? 'Yes' : 'No';
+            return val.toString();
         }
 
         if (!val && replaceEmptyValue) {

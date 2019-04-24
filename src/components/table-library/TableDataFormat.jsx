@@ -39,7 +39,7 @@ const TableDataFormat = ({ onFormat }) => {
                     values={typeFormatOptions[type]}
                     onItemSelect={onTypeFormatSelected} />
             }
-            {type !== '' && format !== '' && format !== AsIsFormat &&
+            {type !== '' && format !== '' &&
                 <Button
                     btnTypeClass="success"
                     label="Apply"

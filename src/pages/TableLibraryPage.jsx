@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import * as reportActions from '../store/actions/reportsActions';
 import * as filters from '../services/filterService';
+import { formatData } from '../services/formatService';
 import Spinner from '../components/common/Spinner.jsx'
 import TableComponent from '../components/table-library/Table.jsx';
 import TableSettings from '../components/table-library/TableSettings.jsx';
@@ -30,10 +31,11 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 
 	useEffect(() => {
 		if (hasData()) {
-			const filteredData = filters.filterData(reports, types, filter);
+			const formatted = formatData(reports, types, formatSettings)
+			const filteredData = filters.filterData(formatted, types, filter);
 			setTableData(filteredData);
 		}
-	}, [reports, filter, shouldReplaceEmpty]);
+	}, [reports, filter, formatSettings, shouldReplaceEmpty]);
 
 	function hasData() {
 		return reports.length !== 0;
@@ -41,7 +43,7 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	
 	function handleFormatAdded(settings) {
         if (settings.type && settings.format) {
-			setFormatSettings(settings);
+			setFormatSettings(settings);			
         }
 	}
 	
