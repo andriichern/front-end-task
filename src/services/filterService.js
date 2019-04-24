@@ -14,17 +14,20 @@ export function filterHeaders(headerEntries, showAll) {
 }
 
 export function filterData(data, types, options) {
-    const { key, operator, criteria } = options;
-
-    if (key && operator && criteria) {
-        const keyType = types[key];
-        const typedCriteria = getTypedCriteria(keyType, criteria);
-        const filterHandler = getFilterHandler(keyType, key, operator, typedCriteria);
-
-        return data.filter(filterHandler);
+    if (!data || data.length === 0) {
+        return;
     }
     
-    return data;
+    if (!options || !options.key || !options.operator || !options.criteria) {
+        return data;
+    }
+
+    const { key, operator, criteria } = options;
+    const keyType = types[key];
+    const typedCriteria = getTypedCriteria(keyType, criteria);
+    const filterHandler = getFilterHandler(keyType, key, operator, typedCriteria);
+
+    return data.filter(filterHandler);
 }
 
 function getFilterHandler(type, key, operator, criteria) {

@@ -4,7 +4,7 @@ import * as sortOrder from  '../../utils/sortingOrder';
 const TableHeader = ({
     header,
     sorting: { key, order },
-    onclick
+    onClick
 }) => {
     function getDirectionIcon() {
         if (!order) {
@@ -20,7 +20,7 @@ const TableHeader = ({
         <th>
             <a 
                 href="#"
-                onClick={onclick}
+                onClick={onClick}
             >
                 {header}
                 {key && key === header && <span className={getDirectionIcon()}></span>}

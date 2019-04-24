@@ -35,7 +35,7 @@ export const typeFormatOptions = {
     [BOOLEAN]: [ReplaceBooleanFormat]
 };
 
-export function formatData(data, types, formatOptions) {
+export default function formatData(data, types, formatOptions) {
     if (!data || !data.length) {
         return;
     }

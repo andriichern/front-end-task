@@ -1,11 +1,16 @@
 import * as sortOrder from  '../utils/sortingOrder';
 import { DATE, NUMBER, getDefaultTypeValue, transformValue } from '../utils/dataTypes';
 
-export default function sortData(data, types, { key, order }) {
+export default function sortData(data, types, sorting) {
     if (!data || data.length === 0) {
         return;
     }
 
+    if (!sorting || !sorting.key || !sorting.order) {
+        return data;
+    }
+    
+    const { key, order } = sorting;
     const keyDataValue = types[key];
     const handler = getSortHandler(keyDataValue, key, order);
     return data.concat().sort(handler);
