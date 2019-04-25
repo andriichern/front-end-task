@@ -40,21 +40,26 @@ export default function formatData(data, types, formatOptions) {
         return;
     }
 
-    if (!formatOptions || !formatOptions.type || !formatOptions.format) {
+    if (!formatOptions || !formatOptions.length) {
         return data;
     }
 
     let result = [];
-    const formatter = typeFormatters[formatOptions.format];
+    let formatters = {};
     const typeEntries = Object.entries(types);
+    
+    for (let i = 0; i < formatOptions.length; i++) {
+        const option = formatOptions[i];
+        formatters[option.type] = typeFormatters[option.format];
+    }
 
     for (let i = 0; i < data.length; i++) {
         let formattedObj = {};
         const currentObj = data[i];
 
         for (let [prop, type] of typeEntries) {
-            if (currentObj[prop] !== undefined && type === formatOptions.type) {
-                formattedObj[prop] = formatter(currentObj[prop]);
+            if (currentObj[prop] !== undefined && formatters[type]) {
+                formattedObj[prop] = formatters[type](currentObj[prop]);
             } else {
                 formattedObj[prop] = currentObj[prop];
             }

@@ -13,7 +13,7 @@ import TableSettings from '../components/table-library/TableSettings.jsx';
 const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	const headerEntries = Object.entries(headers);
 	const [filter, setFilter] = useState({});
-	const [format, setFormat] = useState({});
+	const [formats, setFormats] = useState([]);
 	const [sorting, setSorting] = useState({});
 	const [showAll, setShowAll] = useState(false);
 	const [tableData, setTableData] = useState([]);
@@ -37,11 +37,11 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 		if (hasData()) {
 			formatAndFilterData(reports);
 		}
-	}, [reports, filter, format, sorting, shouldReplaceEmpty]);
+	}, [reports, filter, formats, sorting, shouldReplaceEmpty]);
 
 	function formatAndFilterData(data) {
 		const filteredData = filters.filterData(data, types, filter);
-		const formatted = formatData(filteredData, types, format)
+		const formatted = formatData(filteredData, types, formats)
 		setTableData(sortData(formatted, types, sorting));
 	}
 
@@ -51,12 +51,12 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	
 	function handleFormatAdded(settings) {
         if (settings.type && settings.format) {
-			setFormat(settings);			
+			setFormats([ settings, ...formats ]);
         }
 	}
 
 	function handleClearAllFormatting() {
-		setFormat({});
+		setFormats([]);
 	}
 	
 	function handleShowAll() {
