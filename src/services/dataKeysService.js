@@ -1,7 +1,7 @@
 import { getDataType } from '../utils/dataTypes';
 
-export function getReportKeysAndTypes(data) {
-	if (!data) {
+export default function getDataKeysAndTypes(data) {
+	if (!data || data.length === 0) {
 		return;
 	}
 

@@ -77,7 +77,7 @@ describe('sorting service', () => {
             const result = sortData(testData, testTypes, options);
     
             expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[STRING]; })).toEqual(['String 1', 'Str 2', 'S 3']);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['String1', 'Str2', 'S3']);
         });
 
         test('by boolean asc', () => {

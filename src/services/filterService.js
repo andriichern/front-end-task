@@ -4,11 +4,13 @@ import * as operators from '../utils/filterOperators';
 export function filterHeaders(headerEntries, showAll) {
     let result = [];
     
-    headerEntries.map(([key, display]) => {
-        if (display || showAll) {
-            result.push(key);
-        }
-    });
+    if (headerEntries) {
+        headerEntries.map(([key, display]) => {
+            if (display || showAll) {
+                result.push(key);
+            }
+        });
+    }    
     
     return result;
 }
@@ -38,7 +40,7 @@ function getFilterHandler(type, key, operator, criteria) {
         [operators.EQ]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) === criteria; },
         [operators.LTE]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) <= criteria; },
         [operators.GTE]: entry => { return entry[key] !== undefined && toDateIfNeeded(type, entry[key]) >= criteria; },
-        [operators.CONTAINS]: entry => { return entry[key] && entry[key].includes(criteria); }
+        [operators.CONTAINS]: entry => { return entry[key] && entry[key].toLowerCase().includes(criteria.toLowerCase()); }
     };
 
     return operations[operator];

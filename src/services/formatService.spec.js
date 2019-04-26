@@ -71,7 +71,7 @@ describe('format service', () => {
             const result = formatData(testData, testTypes, options);
     
             expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[STRING]; })).toEqual(['STRING 1', 'STR 2', 'S 3']);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['STRING1', 'STR2', 'S3']);
         });
 
         test('string to lower case', () => {
@@ -79,7 +79,7 @@ describe('format service', () => {
             const result = formatData(testData, testTypes, options);
     
             expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[STRING]; })).toEqual(['string 1', 'str 2', 's 3']);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['string1', 'str2', 's3']);
         });
 
         test('boolean should be replaced with text', () => {

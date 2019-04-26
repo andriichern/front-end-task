@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import * as reportActions from '../store/actions/reportsActions';
+import * as dataActions from '../store/actions/dataActions';
 import * as sortOrder from '../utils/sortingOrder';
 import * as filters from '../services/filterService';
 import sortData from '../services/sortingService';
@@ -10,7 +10,7 @@ import TableComponent from '../components/table-library/Table.jsx';
 import TableSettings from '../components/table-library/TableSettings.jsx';
 
 
-const TableLibraryPage = ({ types, headers, reports, ...props }) => {
+const TableLibraryPage = ({ types, headers, data, ...props }) => {
 	const headerEntries = Object.entries(headers);
 	const [filter, setFilter] = useState({});
 	const [formats, setFormats] = useState([]);
@@ -24,7 +24,7 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
         if (!hasData()) {
 			props.load100();
 		}
-	}, [reports]);
+	}, [data]);
 
 	useEffect(() => {
 		if (hasData()) {
@@ -35,9 +35,9 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 
 	useEffect(() => {
 		if (hasData()) {
-			formatAndFilterData(reports);
+			formatAndFilterData(data);
 		}
-	}, [reports, filter, formats, sorting, shouldReplaceEmpty]);
+	}, [data, filter, formats, sorting, shouldReplaceEmpty]);
 
 	function formatAndFilterData(data) {
 		const filteredData = filters.filterData(data, types, filter);
@@ -46,7 +46,7 @@ const TableLibraryPage = ({ types, headers, reports, ...props }) => {
 	}
 
 	function hasData() {
-		return reports.length !== 0;
+		return data.length !== 0;
 	}
 	
 	function handleFormatAdded(settings) {
@@ -115,14 +115,14 @@ function mapStateToProps(state) {
 	return {
 		types: state.types,
 		headers: state.headers,
-		reports: state.reports
+		data: state.data
 	}
 }
 
 const mapDispatchToProps = {
-	load100: reportActions.loadReports100,
-	load1000: reportActions.loadReports1000,
-	load10000: reportActions.loadReports10000
+	load100: dataActions.loadData100,
+	load1000: dataActions.loadData1000,
+	load10000: dataActions.loadData10000
 }
 
 export default connect(

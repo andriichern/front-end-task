@@ -1,37 +1,37 @@
 import * as actions from '../actionTypes';
 import { loadTypesSuccess } from './typesActions';
 import { loadHeadersSuccess } from './headersActions';
-import * as reportService from '../../services/reportService';
-import { getReportKeysAndTypes } from '../../services/reportKeysService'
+import * as dataService from '../../services/dataService';
+import getDataKeysAndTypes from '../../services/dataKeysService'
 
-export function loadReports100() {
+export function loadData100() {
 	return function (dispatch) {
 		loadReports(dispatch, 100);
 	}
 }
 
-export function loadReports1000() {
+export function loadData1000() {
 	return function (dispatch) {
 		loadReports(dispatch, 1000);
 	}
 }
 
-export function loadReports10000() {
+export function loadData10000() {
 	return function (dispatch) {
 		loadReports(dispatch, 10000);
 	}
 }
 
-function loadReportsSuccess(reports) {
-	return { type: actions.LOAD_REPORTS_SUCCESS, reports };
+function loadDataSuccess(data) {
+	return { type: actions.LOAD_DATA_SUCCESS, data };
 }
 
 function loadReports(dispatch, count) {
 	const method = `getReports${count}`;
-	const reports = reportService[method]();
-	const [headers, types] = getReportKeysAndTypes(reports);
+	const data = dataService[method]();
+	const [headers, types] = getDataKeysAndTypes(data);
 
+	dispatch(loadDataSuccess(data));
 	dispatch(loadTypesSuccess(types));
 	dispatch(loadHeadersSuccess(headers));
-	dispatch(loadReportsSuccess(reports));
 }

@@ -1,7 +1,7 @@
-import { filterData } from '../services/filterService';
-import { STRING, BOOLEAN } from '../utils/dataTypes';
+import { filterHeaders, filterData } from '../services/filterService';
+import { STRING, NUMBER, BOOLEAN } from '../utils/dataTypes';
 import { testData, testTypes } from '../utils/testData';
-import { GTE, LTE, CONTAINS } from '../utils/filterOperators';
+import { GTE, LT, CONTAINS } from '../utils/filterOperators';
 
 function getTestFilterOptions(key, operator, criteria) {
     return {
@@ -11,89 +11,140 @@ function getTestFilterOptions(key, operator, criteria) {
     };
 }
 
+function getTestHeaderEntries() {
+    return [
+        [STRING, true],
+        [NUMBER, false],
+        [BOOLEAN, true]
+    ];
+}
+
 describe('filter service', () => {
-    
-    describe('should exit for null', () => {
+
+    describe('filterHeaders method', () => {
+
+        describe('should return empty result when entries', () => {
+            
+            test('null', () => {
+                const result = filterHeaders(null, true);
         
-        test('data', () => {
-            const options = getTestFilterOptions();
-            const result = filterData(null, testTypes);
-    
-            expect(result).toBeUndefined();
+                expect(result).toHaveLength(0);
+            });
+
+            test('empty', () => {
+                const result = filterHeaders([], false);
+        
+                expect(result).toHaveLength(0);
+            });
         });
 
-        test('types', () => {
-            const options = getTestFilterOptions();
-            const result = filterData(testData, null);
-    
-            expect(result).toBeUndefined();
+        describe('should return headers', () => {
+            
+            test('all headers', () => {
+                const headers = getTestHeaderEntries();
+                const result = filterHeaders(headers, true);
+        
+                expect(result).toHaveLength(headers.length);
+            });
+
+            test('filtered headers', () => {
+                const headers = getTestHeaderEntries();
+                const result = filterHeaders(headers, false);
+
+                const shownHeadersCount = headers.filter(([key, display]) => display).length;
+        
+                expect(result).toHaveLength(shownHeadersCount);
+            });
         });
     });
     
-    describe('should exit for empty', () => {
+    describe('filterData method', () => {
         
-        test('data', () => {
-            const options = getTestFilterOptions();
-            const result = filterData([], testTypes);
+        describe('should exit for null', () => {
+        
+            test('data', () => {
+                const result = filterData(null, testTypes);
+        
+                expect(result).toBeUndefined();
+            });
     
-            expect(result).toBeUndefined();
+            test('types', () => {
+                const result = filterData(testData, null);
+        
+                expect(result).toBeUndefined();
+            });
         });
         
-        test('types', () => {
-            const options = getTestFilterOptions();
-            const result = filterData(testData, {});
-    
-            expect(result).toBeUndefined();
-        });
-    });
-
-    describe('should return not formatted data for empty ', () => {
+        describe('should exit for empty', () => {
+            
+            test('data', () => {
+                const result = filterData([], testTypes);
         
-        test('format options', () => {
-            const result = filterData(testData, testTypes, null);
-    
-            expect(result).toEqual(testData);
+                expect(result).toBeUndefined();
+            });
+            
+            test('types', () => {
+                const result = filterData(testData, {});
+        
+                expect(result).toBeUndefined();
+            });
         });
     
-        test('format option type', () => {
-            const options = getTestFilterOptions(undefined);
-            const result = filterData(testData, testTypes, options);
+        describe('should return not filtered data for empty ', () => {
+            
+            test('filter options', () => {
+                const result = filterData(testData, testTypes, null);
+        
+                expect(result).toEqual(testData);
+            });
+        
+            test('filter key', () => {
+                const options = getTestFilterOptions(undefined);
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toEqual(testData);
+            });
     
-            expect(result).toEqual(testData);
+            test('filter operator', () => {
+                const options = getTestFilterOptions('test', undefined);
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toEqual(testData);
+            });
+            
+            test('filter criteria', () => {
+                const options = getTestFilterOptions('test', GTE);
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toEqual(testData);
+            });
         });
-
-        test('fromat option format', () => {
-            const options = getTestFilterOptions('test', undefined);
-            const result = filterData(testData, testTypes, options);
     
-            expect(result).toEqual(testData);
-        });
-    });
-
-    describe('should format data as', () => {
-
-        test('string to upper case', () => {
-            const options = getTestFilterOptions(STRING, );
-            const result = filterData(testData, testTypes, options);
+        describe('should filter data where', () => {
     
-            expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[STRING]; })).toEqual(['STRING 1', 'STR 2', 'S 3']);
-        });
-
-        test('string to lower case', () => {
-            const options = getTestFilterOptions(STRING);
-            const result = filterData(testData, testTypes, options);
+            test('number greater than or equal to criteria', () => {
+                const options = getTestFilterOptions(NUMBER, GTE, 2);
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toHaveLength(2);
+                expect(result.map(item => { return item[NUMBER]; })).toEqual([2, 3]);
+            });
     
-            expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[STRING]; })).toEqual(['string 1', 'str 2', 's 3']);
-        });
-
-        test('boolean should be replaced with text', () => {
-            const options = getTestFilterOptions(BOOLEAN);
-            const result = filterData(testData, testTypes, options);
+            test('number less than criteria', () => {
+                const options = getTestFilterOptions(NUMBER, LT, 2);
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toHaveLength(1);
+                expect(result.map(item => { return item[NUMBER]; })).toEqual([1]);
+            });
     
-            expect(result).toHaveLength(testData.length);
-            expect(result.map(item => { return item[BOOLEAN]; })).toEqual(['Yes', 'No', 'Yes']);
+            test('string contains criteria', () => {
+                const options = getTestFilterOptions(STRING, CONTAINS, 'st');
+                const result = filterData(testData, testTypes, options);
+        
+                expect(result).toHaveLength(2);
+                expect(result.map(item => { return item[STRING]; })).toEqual(['String1', 'Str2']);
+            });
         });
     });
 });
