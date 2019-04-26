@@ -2,7 +2,8 @@ import * as sortOrder from  '../utils/sortingOrder';
 import { DATE, NUMBER, getDefaultTypeValue, transformValue } from '../utils/dataTypes';
 
 export default function sortData(data, types, sorting) {
-    if (!data || data.length === 0) {
+    if (!data || data.length === 0 || !types ||
+        (Object.entries(types).length === 0 && types.constructor === Object)) {
         return;
     }
 

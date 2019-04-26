@@ -14,7 +14,8 @@ export function filterHeaders(headerEntries, showAll) {
 }
 
 export function filterData(data, types, options) {
-    if (!data || data.length === 0) {
+    if (!data || data.length === 0 || !types ||
+        (Object.entries(types).length === 0 && types.constructor === Object)) {
         return;
     }
     
