@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Checkbox from  '../common/Checkbox.jsx';
 import TableFilter from './TableFilter.jsx';
 import TableDataFormat from './TableDataFormat.jsx';

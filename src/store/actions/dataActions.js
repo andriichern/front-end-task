@@ -6,19 +6,19 @@ import getDataKeysAndTypes from '../../services/dataKeysService'
 
 export function loadData100() {
 	return function (dispatch) {
-		loadReports(dispatch, 100);
+		loadData(dispatch, 100);
 	}
 }
 
 export function loadData1000() {
 	return function (dispatch) {
-		loadReports(dispatch, 1000);
+		loadData(dispatch, 1000);
 	}
 }
 
 export function loadData10000() {
 	return function (dispatch) {
-		loadReports(dispatch, 10000);
+		loadData(dispatch, 10000);
 	}
 }
 
@@ -26,7 +26,7 @@ function loadDataSuccess(data) {
 	return { type: actions.LOAD_DATA_SUCCESS, data };
 }
 
-function loadReports(dispatch, count) {
+function loadData(dispatch, count) {
 	const method = `getReports${count}`;
 	const data = dataService[method]();
 	const [headers, types] = getDataKeysAndTypes(data);

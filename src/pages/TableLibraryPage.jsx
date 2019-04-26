@@ -7,6 +7,7 @@ import sortData from '../services/sortingService';
 import formatData from '../services/formatService';
 import Spinner from '../components/common/Spinner.jsx'
 import TableComponent from '../components/table-library/Table.jsx';
+import TableDataLoad from '../components/table-library/TableDataLoad.jsx';
 import TableSettings from '../components/table-library/TableSettings.jsx';
 
 
@@ -20,11 +21,11 @@ const TableLibraryPage = ({ types, headers, data, ...props }) => {
 	const [tableHeaders, setTableHeaders] = useState([]);
 	const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
 
-	useEffect(() => {
-        if (!hasData()) {
-			props.load100();
-		}
-	}, [data]);
+	// useEffect(() => {
+    //     if (!hasData()) {
+	// 		props.load100();
+	// 	}
+	// }, [data]);
 
 	useEffect(() => {
 		if (hasData()) {
@@ -92,21 +93,23 @@ const TableLibraryPage = ({ types, headers, data, ...props }) => {
 
 	return (
 		<>
-			<TableSettings
-				headers={tableHeaders}
-				onFilter={handleFilter}
-				onShowAll={handleShowAll}
-				onFormat={handleFormatAdded}
-				onFormatClear={handleClearAllFormatting}
-				onReplaceEmpty={handleReplaceEmpty} />
-			{!hasData() 
-				? (<Spinner />)
-				: (<TableComponent
+			<TableDataLoad />
+			{hasData() && 
+			<>
+				<TableSettings
+					headers={tableHeaders}
+					onFilter={handleFilter}
+					onShowAll={handleShowAll}
+					onFormat={handleFormatAdded}
+					onFormatClear={handleClearAllFormatting}
+					onReplaceEmpty={handleReplaceEmpty} />
+				<TableComponent
 					headers={tableHeaders}
 					columns={tableData}
 					sorting={sorting}
 					shouldReplaceEmpty={shouldReplaceEmpty}
-					onHeaderClick={handleSort} />)}
+					onHeaderClick={handleSort} />
+			</>}
 		</>
 	);
 }
@@ -119,13 +122,6 @@ function mapStateToProps(state) {
 	}
 }
 
-const mapDispatchToProps = {
-	load100: dataActions.loadData100,
-	load1000: dataActions.loadData1000,
-	load10000: dataActions.loadData10000
-}
-
 export default connect(
 	mapStateToProps,
-	mapDispatchToProps,
 )(TableLibraryPage);
