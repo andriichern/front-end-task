@@ -1,12 +1,11 @@
-import { STRING, BOOLEAN } from '../utils/dataTypes';
+import { STRING, BOOLEAN, NUMBER } from '../utils/dataTypes';
 import { testData, testTypes } from '../utils/testData';
 import formatData, { UpperStringFormat, LowerStringFormat, ReplaceBooleanFormat } from '../services/formatService';
 
 function getTestFormatOptions(type, format) {
-    return [{
-        type,
-        format
-    }];
+    return {
+        [type]: format
+    };
 }
 
 describe('format service', () => {
@@ -88,6 +87,51 @@ describe('format service', () => {
     
             expect(result).toHaveLength(testData.length);
             expect(result.map(item => { return item[BOOLEAN]; })).toEqual(['Yes', 'No', 'Yes']);
+        });
+
+        test('replace empty values', () => {
+            const options = {};
+            for (let i = 0; i < testData.length; i++) {
+                if (i % 2 === 0) {
+                    testData[i][NUMBER] = null;
+                } else {
+                    testData[i][NUMBER] = undefined;
+                }
+            }
+            
+            const result = formatData(testData, testTypes, options, true);
+    
+            expect(result).toHaveLength(testData.length);
+            expect(result.map(item => { return item[NUMBER]; })).toEqual([' --- ', ' --- ', ' --- ']);
+        });
+    });
+
+    describe('complex formatting test', () => {
+        let options = getTestFormatOptions(STRING, UpperStringFormat);
+
+        test('should format string to upper case', () => {            
+            const result = formatData(testData, testTypes, options);
+    
+            expect(result).toHaveLength(testData.length);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['STRING1', 'STR2', 'S3']);
+        });
+
+        test('then should replace booleans with text', () => {
+            options[BOOLEAN]=ReplaceBooleanFormat;
+            const result = formatData(testData, testTypes, options);
+    
+            expect(result).toHaveLength(testData.length);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['STRING1', 'STR2', 'S3']);
+            expect(result.map(item => { return item[BOOLEAN]; })).toEqual(['Yes', 'No', 'Yes']);
+        });
+
+        test('then should format string to lower case', () => {
+            options[STRING]=LowerStringFormat;
+            const result = formatData(testData, testTypes, options);
+    
+            expect(result).toHaveLength(testData.length);
+            expect(result.map(item => { return item[BOOLEAN]; })).toEqual(['Yes', 'No', 'Yes']);
+            expect(result.map(item => { return item[STRING]; })).toEqual(['string1', 'str2', 's3']);
         });
     });
 });

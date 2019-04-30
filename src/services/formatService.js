@@ -56,10 +56,11 @@ export default function formatData(data, types, formatOptions, replaceEmpty) {
         for (let [prop, type] of typeEntries) {
             const propValue = currentObj[prop];
             const formatType = formatOptions[type];
-            
-            if (propValue !== undefined && formatType) {
+            const hasValue = propValue !== null && propValue !== undefined;
+
+            if (hasValue && formatType) {
                 formattedObj[prop] = typeFormatters[formatType](propValue);
-            } else if (propValue === undefined && replaceEmpty) {
+            } else if (!hasValue && replaceEmpty) {
                 formattedObj[prop] = EMPTY_VALUE;
             } else {
                 formattedObj[prop] = propValue;
