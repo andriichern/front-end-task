@@ -1,10 +1,8 @@
-import * as actions from '../actionTypes';
+import { LOAD_DATA_SUCCESS } from '../actionTypes';
 
-export default function reportsReducer(state = {}, action) {
-	if (action.type === actions.LOAD_HEADERS_SUCCESS) {
-		return {
-			...action.headers,
-		}
+export default function headersReducer(state = {}, action) {
+	if (action.type === LOAD_DATA_SUCCESS) {
+		return action.headers;
 	}
 	
 	return state;

@@ -11,8 +11,7 @@ const TableRow = ({
             {dataKeys.map((cellKey, i) => 
                 <TableCell
                     key={i}
-                    value={rowData[cellKey]}
-                    replaceEmptyValue={replaceEmptyValues} />)}
+                    value={rowData[cellKey]} />)}
         </tr>
     );
 };

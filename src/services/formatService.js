@@ -9,6 +9,7 @@ export const CapitalStringFormat = 'Capital case';
 export const MoneyFormat = 'Money';
 export const ReplaceBooleanFormat = 'Replace with Yes & No';
 
+const EMPTY_VALUE = ' --- ';
 const moneyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
@@ -35,34 +36,33 @@ export const typeFormatOptions = {
     [BOOLEAN]: [ReplaceBooleanFormat]
 };
 
-export default function formatData(data, types, formatOptions) {
+export default function formatData(data, types, formatOptions, replaceEmpty) {
     if (!data || !data.length || !types ||
         (Object.entries(types).length === 0 && types.constructor === Object)) {
         return;
     }
 
-    if (!formatOptions || !formatOptions.length) {
+    if (!replaceEmpty && !formatOptions) {
         return data;
     }
 
     let result = [];
-    let formatters = {};
     const typeEntries = Object.entries(types);
-    
-    for (let i = 0; i < formatOptions.length; i++) {
-        const option = formatOptions[i];
-        formatters[option.type] = typeFormatters[option.format];
-    }
 
     for (let i = 0; i < data.length; i++) {
         let formattedObj = {};
         const currentObj = data[i];
 
         for (let [prop, type] of typeEntries) {
-            if (currentObj[prop] !== undefined && formatters[type]) {
-                formattedObj[prop] = formatters[type](currentObj[prop]);
+            const propValue = currentObj[prop];
+            const formatType = formatOptions[type];
+            
+            if (propValue !== undefined && formatType) {
+                formattedObj[prop] = typeFormatters[formatType](propValue);
+            } else if (propValue === undefined && replaceEmpty) {
+                formattedObj[prop] = EMPTY_VALUE;
             } else {
-                formattedObj[prop] = currentObj[prop];
+                formattedObj[prop] = propValue;
             }
         }
 

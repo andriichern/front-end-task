@@ -28,7 +28,7 @@ html {
     }
 }
 
-.row {
+.dataformat-row {
     margin-bottom: 15px;
     
     & > .btn {
@@ -46,6 +46,12 @@ html {
 
     .form-check-input {
         margin-top: .4rem;
+    }
+}
+
+.row {
+    & > .btn {
+        margin-right: 10px;
     }
 }
 

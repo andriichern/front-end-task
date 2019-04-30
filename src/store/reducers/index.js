@@ -3,7 +3,6 @@ import data from './dataReducer';
 import types from './typesReducer';
 import headers from './headersReducer';
 
-
 export const rootReducer = combineReducers({
 	data,
 	types,

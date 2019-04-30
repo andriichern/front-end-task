@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableRow from './TableRow.jsx';
 import TableHeader from './TableHeader.jsx';
 
-const TableComponent = ({
+const Table = ({
     headers,
     columns,
     sorting,
@@ -28,17 +28,16 @@ const TableComponent = ({
                     <TableRow 
                         key={i}
                         rowData={columnObj}
-                        dataKeys={headers}
-                        replaceEmptyValues={shouldReplaceEmpty} />
+                        dataKeys={headers} />
                 )}
             </tbody>
         </table>
     );
 }
 
-TableComponent.propTypes = {
+Table.propTypes = {
     headers: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
 };
 
-export default TableComponent;
+export default Table;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as dataActions from '../../store/actions/dataActions';
 import Button from '../common/Button.jsx';
 
-const TableDataLoad = ({ load100, load1000, load10000 }) => {
+const DataLoad = ({ load100, load1000, load10000 }) => {
     return(
         <div className="row">
             <Button
@@ -31,4 +31,4 @@ const mapDispatchToProps = {
 export default connect(
     null,
     mapDispatchToProps
-)(TableDataLoad);
+)(DataLoad);

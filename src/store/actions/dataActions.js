@@ -1,6 +1,4 @@
 import * as actions from '../actionTypes';
-import { loadTypesSuccess } from './typesActions';
-import { loadHeadersSuccess } from './headersActions';
 import * as dataService from '../../services/dataService';
 import getDataKeysAndTypes from '../../services/dataKeysService'
 
@@ -23,7 +21,7 @@ export function loadData10000() {
 }
 
 function loadDataSuccess(data) {
-	return { type: actions.LOAD_DATA_SUCCESS, data };
+	return { type: actions.LOAD_DATA_SUCCESS, ...data };
 }
 
 function loadData(dispatch, count) {
@@ -31,7 +29,5 @@ function loadData(dispatch, count) {
 	const data = dataService[method]();
 	const [headers, types] = getDataKeysAndTypes(data);
 
-	dispatch(loadDataSuccess(data));
-	dispatch(loadTypesSuccess(types));
-	dispatch(loadHeadersSuccess(headers));
+	dispatch(loadDataSuccess({ data, types, headers }));
 }

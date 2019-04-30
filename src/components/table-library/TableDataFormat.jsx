@@ -6,7 +6,8 @@ import { typeFormatOptions } from '../../services/formatService';
 
 const TableDataFormat = ({ onFormat, onClearAll }) => {
     const [type, setType] = useState('');
-    const [format, setFormat] = useState('');
+    const [format, setFormat] = useState({});
+    const [formatOptions, setFormatOptions] = useState({});
     const [formatApplied, setFormatApplied] = useState(false);
     
     function onTypeSelected({ target: { text }}) {
@@ -19,13 +20,19 @@ const TableDataFormat = ({ onFormat, onClearAll }) => {
     }
 
     function onFormatApplied() {
-        onFormat({ type, format });
+        const options = {
+            ...formatOptions,
+            [type]: format            
+        };
         setFormatApplied(true);
+        setFormatOptions(options);
+        onFormat(options);
     }
 
     function onClearAllBtn() {
         setType('');
         setFormat('');
+        setFormatOptions({});
         setFormatApplied(false);
         onClearAll();
     }
@@ -44,7 +51,7 @@ const TableDataFormat = ({ onFormat, onClearAll }) => {
                     label="Select Format"
                     btnTypeClass="outline-primary"
                     content="dataFormat"
-                    selected={format}
+                    selected={format || formatOptions[type]}
                     values={typeFormatOptions[type]}
                     onItemSelect={onTypeFormatSelected} />
             }
