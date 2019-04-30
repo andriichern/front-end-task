@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack.config.dev.js",
+    "dev": "run-p test webpack",
+    "webpack": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline --progress --mode development --config webpack.config.dev.js",
     "test": "jest"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "html-webpack-plugin": "3.2.0",
     "jest": "^24.7.1",
     "node-sass": "4.11.0",
+    "npm-run-all": "^4.1.5",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
