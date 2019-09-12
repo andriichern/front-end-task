@@ -8,7 +8,7 @@ import * as sortOrder from '../../utils/sortingOrder';
 import * as filters from '../../services/filterService';
 
 const TableComponent = ({
-	dataTypes,
+	types,
 	dataHeaders,
     data
 }) => {
@@ -36,9 +36,9 @@ const TableComponent = ({
         if (!tableData.length) {
             setTableData(data);
         } else {
-            const filteredData = filters.filterData(data, dataTypes, filter);
-            const formatted = formatData(filteredData, dataTypes, formats, shouldReplaceEmpty);
-            setTableData(sortData(formatted, dataTypes, sorting));
+            const filteredData = filters.filterData(data, types, filter);
+            const formatted = formatData(filteredData, types, formats, shouldReplaceEmpty);
+            setTableData(sortData(formatted, types, sorting));
         }
         setLoading(false);
 	}
@@ -89,6 +89,7 @@ const TableComponent = ({
             ) : (
                 <>
                     <TableSettings
+                        types={types}
                         headers={tableHeaders}
                         onFilter={handleFilter}
                         onShowAll={handleShowAll}

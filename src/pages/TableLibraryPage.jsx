@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
-import DataLoad from '../components/table-library/TableDataLoad.jsx';
+import TableDataLoad from '../components/table-library/TableDataLoad.jsx';
 import TableComponent from '../components/table-library/TableComponent.jsx';
 
 const TableLibraryPage = ({
@@ -12,11 +12,11 @@ const TableLibraryPage = ({
 
 	return (
 		<>
-			<DataLoad />
+			<TableDataLoad />
 			{data.length > 0 &&
 				<TableComponent
 					data={data}
-					dataTypes={types}
+					types={types}
 					dataHeaders={headerEntries} />
 			}
 		</>

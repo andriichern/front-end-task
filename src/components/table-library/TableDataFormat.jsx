@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import Button from '../common/Button.jsx';
 import Dropdown from '../common/Dropdown.jsx';
-import { allTypes } from '../../utils/dataTypes';
+//import { allTypes } from '../../utils/dataTypes';
 import { typeFormatOptions } from '../../services/formatService';
 
-const TableDataFormat = ({ onFormat, onClearAll }) => {
-    const [type, setType] = useState('');
+const TableDataFormat = ({
+    types,
+    headers,
+    onFormat,
+    onClearAll
+}) => {
+    const [column, setColumn] = useState('');
     const [format, setFormat] = useState({});
     const [formatOptions, setFormatOptions] = useState({});
     const [formatApplied, setFormatApplied] = useState(false);
     
-    function onTypeSelected({ target: { text }}) {
-        setType(text);
+    function onColumnSelected({ target: { text }}) {
+        setColumn(text);
         setFormat('');
     }
 
-    function onTypeFormatSelected({ target: { text }}) {
+    function onColumnonFormatSelected({ target: { text }}) {
         setFormat(text);
     }
 
     function onFormatApplied() {
         const options = {
             ...formatOptions,
-            [type]: format            
+            [column]: format            
         };
         setFormatApplied(true);
         setFormatOptions(options);
@@ -30,7 +35,7 @@ const TableDataFormat = ({ onFormat, onClearAll }) => {
     }
 
     function onClearAllBtn() {
-        setType('');
+        setColumn('');
         setFormat('');
         setFormatOptions({});
         setFormatApplied(false);
@@ -40,22 +45,22 @@ const TableDataFormat = ({ onFormat, onClearAll }) => {
     return(
         <div className="dataformat-row">
             <Dropdown
-                label="Select Type"
+                label="Select Column"
                 btnTypeClass="outline-primary"
                 content="dataType"
-                selected={type}
-                values={allTypes}
-                onItemSelect={onTypeSelected} />
-            {type !== '' && 
+                selected={column}
+                values={headers}
+                onItemSelect={onColumnSelected} />
+            {column !== '' && 
                 <Dropdown 
                     label="Select Format"
                     btnTypeClass="outline-primary"
                     content="dataFormat"
-                    selected={format || formatOptions[type]}
-                    values={typeFormatOptions[type]}
-                    onItemSelect={onTypeFormatSelected} />
+                    selected={format || formatOptions[column]}
+                    values={typeFormatOptions[types[column]]}
+                    onItemSelect={onColumnonFormatSelected} />
             }
-            {type !== '' && format !== '' &&
+            {column !== '' && format !== '' &&
                 <Button
                     btnTypeClass="success"
                     label="Apply"

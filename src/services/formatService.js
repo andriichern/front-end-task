@@ -9,6 +9,8 @@ export const CapitalStringFormat = 'Capital case';
 export const MoneyFormat = 'Money';
 export const ReplaceBooleanFormat = 'Replace with Yes & No';
 
+const NO_VALUE = 'No';
+const YES_VALUE = 'Yes';
 const EMPTY_VALUE = ' --- ';
 const moneyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -22,7 +24,7 @@ const typeFormatters = {
     [UpperStringFormat]: value => { return value.toUpperCase(); },
     [LowerStringFormat]: value => { return value.toLowerCase(); },
     [MoneyFormat]: value => { return moneyFormatter.format(value); },
-    [ReplaceBooleanFormat]: value => { return value ? 'Yes' : 'No'; },
+    [ReplaceBooleanFormat]: value => { return value ? YES_VALUE : NO_VALUE; },
     [CapitalStringFormat]: value => {
         const lower = value.toLowerCase(); 
         return (lower.charAt(0).toUpperCase() + lower.slice(1));
@@ -47,15 +49,15 @@ export default function formatData(data, types, formatOptions, replaceEmpty) {
     }
 
     let result = [];
-    const typeEntries = Object.entries(types);
+    const typeEntries = Object.keys(types);
 
     for (let i = 0; i < data.length; i++) {
         let formattedObj = {};
         const currentObj = data[i];
 
-        for (let [prop, type] of typeEntries) {
+        for (let prop of typeEntries) {
             const propValue = currentObj[prop];
-            const formatType = formatOptions[type];
+            const formatType = formatOptions[prop];
             const hasValue = propValue !== null && propValue !== undefined;
 
             if (hasValue && formatType) {

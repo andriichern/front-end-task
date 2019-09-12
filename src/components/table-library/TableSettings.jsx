@@ -2,8 +2,10 @@ import React from 'react';
 import Checkbox from  '../common/Checkbox.jsx';
 import TableFilter from './TableFilter.jsx';
 import TableDataFormat from './TableDataFormat.jsx';
+import { type } from 'os';
 
 const TableSettings = ({
+    types,
     headers,
     onFormat,
     onFormatClear,
@@ -13,7 +15,11 @@ const TableSettings = ({
 }) => {
     return(
         <div className="row table-settings-container">
-            <TableDataFormat onFormat={onFormat} onClearAll={onFormatClear} />
+            <TableDataFormat
+                types={types}
+                headers={headers}
+                onFormat={onFormat}
+                onClearAll={onFormatClear} />
             <Checkbox 
                 label="Replace Empty Values"
                 classList="flex-checkbox-center"
