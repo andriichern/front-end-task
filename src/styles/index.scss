@@ -10,6 +10,10 @@ html {
     box-sizing: inherit;
 }
 
+.btn-page {
+    margin: 0 5px;
+}
+
 .caret {
     display: inline-block;
     margin-left: .255em;
@@ -53,6 +57,10 @@ html {
     & > .btn {
         margin-right: 10px;
     }
+}
+
+.table-footer tr {
+    text-align: center;
 }
 
 .table-settings-container {

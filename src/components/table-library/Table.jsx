@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './TableRow.jsx';
 import TableHeader from './TableHeader.jsx';
+import TablePager from './TablePager.jsx';
 
 const Table = ({
     headers,
@@ -31,6 +32,16 @@ const Table = ({
                         dataKeys={headers} />
                 )}
             </tbody>
+            {columns.length > 20 && 
+                <tfoot className='table-footer'>
+                    <tr>
+                        <TablePager 
+                            dataCount={columns.length}
+                            columnCount={headers.length}
+                        />                    
+                    </tr>
+                </tfoot>
+            }
         </table>
     );
 }
