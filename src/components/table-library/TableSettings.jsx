@@ -2,7 +2,6 @@ import React from 'react';
 import Checkbox from  '../common/Checkbox.jsx';
 import TableFilter from './TableFilter.jsx';
 import TableDataFormat from './TableDataFormat.jsx';
-import { type } from 'os';
 
 const TableSettings = ({
     types,
@@ -33,4 +32,4 @@ const TableSettings = ({
     );
 };
 
-export default TableSettings;
+export default React.memo(TableSettings);

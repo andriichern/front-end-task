@@ -18,7 +18,8 @@ const TableComponent = ({
     const [loading, setLoading] = useState(true);
 	const [showAll, setShowAll] = useState(false);
 	const [tableData, setTableData] = useState([]);
-	const [tableHeaders, setTableHeaders] = useState([]);
+    const [tableHeaders, setTableHeaders] = useState([]);
+    const [itemsPerPage, setItemsPerPage] = useState(20);
 	const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
 
     useEffect(() => {
@@ -82,6 +83,11 @@ const TableComponent = ({
         setSorting({ ...sorting });
     }
 
+    function handlePageChange(pageIndex) {
+        console.log(pageIndex);
+        
+    }
+
     return(
         <>
             {loading ? (
@@ -100,7 +106,8 @@ const TableComponent = ({
                         headers={tableHeaders}
                         columns={tableData}
                         sorting={sorting}
-                        shouldReplaceEmpty={shouldReplaceEmpty}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={handlePageChange}
                         onHeaderClick={handleSort} />
                 </>
             )}
@@ -108,4 +115,4 @@ const TableComponent = ({
     );
 };
 
-export default TableComponent;
+export default React.memo(TableComponent);

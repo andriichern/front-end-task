@@ -3,8 +3,7 @@ import TableCell from './TableCell.jsx';
 
 const TableRow = ({
     rowData,
-    dataKeys,
-    replaceEmptyValues
+    dataKeys
 }) => {
     return (
         <tr>
@@ -16,4 +15,4 @@ const TableRow = ({
     );
 };
 
-export default TableRow;
+export default React.memo(TableRow);

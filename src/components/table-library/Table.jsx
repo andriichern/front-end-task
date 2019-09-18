@@ -8,8 +8,9 @@ const Table = ({
     headers,
     columns,
     sorting,
-    shouldReplaceEmpty,
-    onHeaderClick
+    itemsPerPage,
+    onPageChange,
+    onHeaderClick    
 }) => {
     return(
         <table className='table table-hover'>
@@ -32,12 +33,14 @@ const Table = ({
                         dataKeys={headers} />
                 )}
             </tbody>
-            {columns.length > 20 && 
+            {columns.length > itemsPerPage && 
                 <tfoot className='table-footer'>
                     <tr>
                         <TablePager 
                             dataCount={columns.length}
                             columnCount={headers.length}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={onPageChange}
                         />                    
                     </tr>
                 </tfoot>
@@ -51,4 +54,4 @@ Table.propTypes = {
     columns: PropTypes.array.isRequired,
 };
 
-export default Table;
+export default React.memo(Table);

@@ -4,14 +4,23 @@ import Button from '../common/Button.jsx';
 const TablePager = ({
     dataCount,
     columnCount,
-    pageCount = 20,
-    onPageClicked
+    itemsPerPage,
+    onPageChange
 }) => {
+    let pages;
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
+    function canGoNext() {
+        return currentPageIndex < pages - 1;
+    }
+
+    function canGoBack() {
+        return currentPageIndex > 0;
+    }
+
     function countPages() {
-        const remainder = dataCount % pageCount;
-        let pages = dataCount / pageCount;
+        const remainder = dataCount % itemsPerPage;
+        pages = dataCount / itemsPerPage;
         
         if (remainder !== 0) {
             pages++;
@@ -22,19 +31,28 @@ const TablePager = ({
 
     function onPageBtnClick({ target: { innerText: page } }) {
         const pageNumber = parseInt(page);
+        const currentPage = pageNumber - 1;
 
-        setCurrentPageIndex(pageNumber - 1);
-        //onPageClicked(currentPageIndex);
+        setCurrentPageIndex(currentPage);
+        onPageChange(currentPage);
     }
 
     function onNextClick() {
-        setCurrentPageIndex(currentPageIndex + 1);
-        //onPageClicked(currentPageIndex);
+        if (canGoNext()) {
+            const currentPage = currentPageIndex + 1;
+
+            setCurrentPageIndex(currentPage);
+            onPageChange(currentPage);
+        }        
     }
 
     function onPreviousClick() {
-        setCurrentPageIndex(currentPageIndex - 1);
-        //onPageClicked(currentPageIndex);
+        if (canGoBack()) {
+            const currentPage = currentPageIndex - 1;
+
+            setCurrentPageIndex(currentPage);
+            onPageChange(currentPage);
+        }        
     }
 
     return (
@@ -43,6 +61,7 @@ const TablePager = ({
                 <Button
                     btnTypeClass='light'
                     label='Previous'
+                    disabled={!canGoBack()}
                     onClick={onPreviousClick} />
             </td>
             <td colSpan={columnCount - 2}>
@@ -58,6 +77,7 @@ const TablePager = ({
                 <Button
                     btnTypeClass='light'
                     label='Next'
+                    disabled={!canGoNext()}
                     onClick={onNextClick} />
             </td>
         </>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../common/Button.jsx';
 import Dropdown from '../common/Dropdown.jsx';
-//import { allTypes } from '../../utils/dataTypes';
 import { typeFormatOptions } from '../../services/formatService';
 
 const TableDataFormat = ({
@@ -74,4 +73,4 @@ const TableDataFormat = ({
     );
 };
 
-export default TableDataFormat;
+export default React.memo(TableDataFormat);

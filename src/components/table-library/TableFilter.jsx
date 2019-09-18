@@ -70,4 +70,4 @@ const TableFilter = ({ headers, onFilter }) => {
     );
 };
 
-export default TableFilter;
+export default React.memo(TableFilter);

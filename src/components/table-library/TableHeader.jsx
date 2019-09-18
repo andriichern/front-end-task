@@ -29,4 +29,4 @@ const TableHeader = ({
     );
 }
 
-export default TableHeader;
+export default React.memo(TableHeader);
