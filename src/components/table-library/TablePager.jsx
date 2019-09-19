@@ -10,6 +10,21 @@ const TablePager = ({
     let pages;
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
+    function countPages() {
+        if (dataCount > 0) {
+            const remainder = dataCount % itemsPerPage;
+            pages = Math.floor(dataCount / itemsPerPage);
+            
+            if (remainder !== 0) {
+                pages++;
+            }
+
+            return pages;
+        }
+
+        return 0;
+    }
+
     function canGoNext() {
         return currentPageIndex < pages - 1;
     }
@@ -18,41 +33,27 @@ const TablePager = ({
         return currentPageIndex > 0;
     }
 
-    function countPages() {
-        const remainder = dataCount % itemsPerPage;
-        pages = dataCount / itemsPerPage;
-        
-        if (remainder !== 0) {
-            pages++;
-        }
-
-        return pages;
-    }
-
     function onPageBtnClick({ target: { innerText: page } }) {
         const pageNumber = parseInt(page);
-        const currentPage = pageNumber - 1;
 
-        setCurrentPageIndex(currentPage);
-        onPageChange(currentPage);
+        setCurrentPage(pageNumber - 1);
     }
 
     function onNextClick() {
         if (canGoNext()) {
-            const currentPage = currentPageIndex + 1;
-
-            setCurrentPageIndex(currentPage);
-            onPageChange(currentPage);
-        }        
+            setCurrentPage(currentPageIndex + 1);
+        }
     }
 
     function onPreviousClick() {
         if (canGoBack()) {
-            const currentPage = currentPageIndex - 1;
+            setCurrentPage(currentPageIndex - 1);
+        }
+    }
 
-            setCurrentPageIndex(currentPage);
-            onPageChange(currentPage);
-        }        
+    function setCurrentPage(currentPage) {
+        setCurrentPageIndex(currentPage);
+        onPageChange(currentPage);
     }
 
     return (

@@ -8,6 +8,7 @@ const Table = ({
     headers,
     columns,
     sorting,
+    dataCount,
     itemsPerPage,
     onPageChange,
     onHeaderClick    
@@ -33,11 +34,11 @@ const Table = ({
                         dataKeys={headers} />
                 )}
             </tbody>
-            {columns.length > itemsPerPage && 
+            {dataCount >= itemsPerPage && 
                 <tfoot className='table-footer'>
                     <tr>
                         <TablePager 
-                            dataCount={columns.length}
+                            dataCount={dataCount}
                             columnCount={headers.length}
                             itemsPerPage={itemsPerPage}
                             onPageChange={onPageChange}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Table from './Table.jsx';
 import TableSettings from './TableSettings.jsx';
 import Spinner from '../common/Spinner.jsx';
+import pageData from '../../services/pagingService';
 import sortData from '../../services/sortingService';
 import formatData from '../../services/formatService';
 import * as sortOrder from '../../utils/sortingOrder';
@@ -17,7 +18,9 @@ const TableComponent = ({
     const [sorting, setSorting] = useState({});
     const [loading, setLoading] = useState(true);
 	const [showAll, setShowAll] = useState(false);
-	const [tableData, setTableData] = useState([]);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [tableData, setTableData] = useState([]);
+    const [displayData, setDisplayData] = useState([]);
     const [tableHeaders, setTableHeaders] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(20);
 	const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
@@ -31,15 +34,23 @@ const TableComponent = ({
 
 	useEffect(() => {
         formatAndFilterData();
-	}, [data, filter, formats, sorting, shouldReplaceEmpty]);
+	}, [data, filter, formats, sorting, shouldReplaceEmpty, pageIndex]);
 
 	function formatAndFilterData() {
         if (!tableData.length) {
+            const paged = pageData(data, itemsPerPage, pageIndex);
+            
             setTableData(data);
+            setDisplayData(paged);
         } else {
             const filteredData = filters.filterData(data, types, filter);
-            const formatted = formatData(filteredData, types, formats, shouldReplaceEmpty);
-            setTableData(sortData(formatted, types, sorting));
+            const sorted = sortData(filteredData, types, sorting);
+            
+            const paged = pageData(sorted, itemsPerPage, pageIndex);
+            const formatted = formatData(paged, types, formats, shouldReplaceEmpty);
+            
+            setTableData(sorted);
+            setDisplayData(formatted);
         }
         setLoading(false);
 	}
@@ -65,7 +76,8 @@ const TableComponent = ({
 	}
 
 	function handleFilter(filter) {
-		setFilter({ ...filter });
+        setFilter({ ...filter });
+        setPageIndex(0);
 	}
 
 	function handleSort({ target: { text: key }}) {
@@ -84,8 +96,7 @@ const TableComponent = ({
     }
 
     function handlePageChange(pageIndex) {
-        console.log(pageIndex);
-        
+        setPageIndex(pageIndex);
     }
 
     return(
@@ -104,8 +115,9 @@ const TableComponent = ({
                         onReplaceEmpty={handleReplaceEmpty} />
                     <Table
                         headers={tableHeaders}
-                        columns={tableData}
+                        columns={displayData}
                         sorting={sorting}
+                        dataCount={tableData.length}
                         itemsPerPage={itemsPerPage}
                         onPageChange={handlePageChange}
                         onHeaderClick={handleSort} />
