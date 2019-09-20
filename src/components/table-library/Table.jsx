@@ -10,8 +10,9 @@ const Table = ({
     sorting,
     dataCount,
     itemsPerPage,
+    pageIndex,    
+    onHeaderClick,
     onPageChange,
-    onHeaderClick    
 }) => {
     return(
         <table className='table table-hover'>
@@ -41,6 +42,7 @@ const Table = ({
                             dataCount={dataCount}
                             columnCount={headers.length}
                             itemsPerPage={itemsPerPage}
+                            currentPageIndex={pageIndex}
                             onPageChange={onPageChange}
                         />                    
                     </tr>

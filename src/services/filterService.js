@@ -1,7 +1,7 @@
 import { DATE, NUMBER, BOOLEAN } from '../utils/dataTypes';
 import * as operators from '../utils/filterOperators';
 
-export function filterHeaders(headerEntries, showAll) {
+export function filterHeaders(headerEntries, showAll = false) {
     let result = [];
     
     if (headerEntries) {

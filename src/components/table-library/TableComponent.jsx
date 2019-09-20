@@ -19,28 +19,21 @@ const TableComponent = ({
     const [loading, setLoading] = useState(true);
 	const [showAll, setShowAll] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
-    const [tableData, setTableData] = useState([]);
+    const [dataCount, setDataCount] = useState(data.length);
     const [displayData, setDisplayData] = useState([]);
-    const [tableHeaders, setTableHeaders] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(20);
-	const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
-
-    useEffect(() => {
-        if (dataHeaders.length !== 0) {
-            const filteredHeaders = filters.filterHeaders(dataHeaders, showAll);
-            setTableHeaders(filteredHeaders);            
-        }
-	}, [dataHeaders, showAll]);
+    const [shouldReplaceEmpty, setShouldReplaceEmpty] = useState(false);
+    
+    const filteredHeaders = filters.filterHeaders(dataHeaders, showAll);
 
 	useEffect(() => {
         formatAndFilterData();
 	}, [data, filter, formats, sorting, shouldReplaceEmpty, pageIndex]);
 
 	function formatAndFilterData() {
-        if (!tableData.length) {
+        if (!displayData.length) {
             const paged = pageData(data, itemsPerPage, pageIndex);
             
-            setTableData(data);
             setDisplayData(paged);
         } else {
             const filteredData = filters.filterData(data, types, filter);
@@ -49,8 +42,8 @@ const TableComponent = ({
             const paged = pageData(sorted, itemsPerPage, pageIndex);
             const formatted = formatData(paged, types, formats, shouldReplaceEmpty);
             
-            setTableData(sorted);
             setDisplayData(formatted);
+            setDataCount(filteredData.length);
         }
         setLoading(false);
 	}
@@ -107,20 +100,21 @@ const TableComponent = ({
                 <>
                     <TableSettings
                         types={types}
-                        headers={tableHeaders}
+                        headers={filteredHeaders}
                         onFilter={handleFilter}
                         onShowAll={handleShowAll}
                         onFormat={handleFormatAdded}
                         onFormatClear={handleClearAllFormatting}
                         onReplaceEmpty={handleReplaceEmpty} />
                     <Table
-                        headers={tableHeaders}
+                        headers={filteredHeaders}
                         columns={displayData}
                         sorting={sorting}
-                        dataCount={tableData.length}
+                        dataCount={dataCount}
                         itemsPerPage={itemsPerPage}
-                        onPageChange={handlePageChange}
-                        onHeaderClick={handleSort} />
+                        pageIndex={pageIndex}
+                        onHeaderClick={handleSort}
+                        onPageChange={handlePageChange} />
                 </>
             )}
         </>

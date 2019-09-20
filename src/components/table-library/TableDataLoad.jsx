@@ -1,34 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import * as dataActions from '../../store/actions/dataActions';
 import Button from '../common/Button.jsx';
 
-const DataLoad = ({ load100, load1000, load10000 }) => {
+const TableDataLoad = ({ loadData100, loadData1000, loadData10000 }) => {
     return(
         <div className="row">
             <Button
                 btnTypeClass="success"
                 label="Load Data 100"
-                onClick={load100} />
+                onClick={loadData100} />
             <Button
                 btnTypeClass="success"
                 label="Load Data 1000"
-                onClick={load1000} />
+                onClick={loadData1000} />
             <Button
                 btnTypeClass="success"
                 label="Load Data 10000"
-                onClick={load10000} />
+                onClick={loadData10000} />
         </div>
     );
 }
 
-const mapDispatchToProps = {
-	load100: dataActions.loadData100,
-	load1000: dataActions.loadData1000,
-	load10000: dataActions.loadData10000
-};
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(DataLoad);
+export default React.memo(TableDataLoad);
