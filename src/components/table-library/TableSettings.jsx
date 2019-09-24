@@ -19,11 +19,13 @@ const TableSettings = ({
                 headers={headers}
                 onFormat={onFormat}
                 onClearAll={onFormatClear} />
-            <Checkbox 
+            <Checkbox
+                name="replaceEmpty"
                 label="Replace Empty Values"
                 classList="flex-checkbox-center"
                 onChange={onReplaceEmpty} />
             <Checkbox 
+                name="showAll"
                 label="Show All Columns"
                 classList="flex-checkbox-center"
                 onChange={onShowAll} />

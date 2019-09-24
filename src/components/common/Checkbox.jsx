@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Checkbox = ({
+    name,
     label,
     classList='',
     onChange
@@ -8,14 +9,14 @@ const Checkbox = ({
     return(
         <div className={`form-group form-check ${classList}`}>
             <input 
-                id="showAll"
+                id={name}
                 type="checkbox"
                 aria-label="Show All Columns checkbox"
-                className="form-check-input" 
+                className="form-check-input"
                 onChange={onChange} />
             <label
                 className="form-check-label"
-                htmlFor="showAll">{label}</label>
+                htmlFor={name}>{label}</label>
         </div>
     );
 };
