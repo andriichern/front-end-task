@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Table from './Table.jsx';
 import TableSettings from './TableSettings.jsx';
 import Spinner from '../common/Spinner.jsx';
@@ -9,7 +10,7 @@ import * as sortOrder from '../../utils/sortingOrder';
 import * as filters from '../../services/filterService';
 
 const TableComponent = ({
-	types,
+	dataTypes,
 	dataHeaders,
     data
 }) => {
@@ -28,7 +29,7 @@ const TableComponent = ({
 
 	useEffect(() => {
         formatAndFilterData();
-	}, [data, filter, formats, sorting, shouldReplaceEmpty, pageIndex]);
+	}, [data, filter, formats, sorting, shouldReplaceEmpty, pageIndex, itemsPerPage]);
 
 	function formatAndFilterData() {
         if (!displayData.length) {
@@ -36,11 +37,11 @@ const TableComponent = ({
             
             setDisplayData(paged);
         } else {
-            const filteredData = filters.filterData(data, types, filter);
-            const sorted = sortData(filteredData, types, sorting);
+            const filteredData = filters.filterData(data, dataTypes, filter);
+            const sorted = sortData(filteredData, dataTypes, sorting);
             
             const paged = pageData(sorted, itemsPerPage, pageIndex);
-            const formatted = formatData(paged, types, formats, shouldReplaceEmpty);
+            const formatted = formatData(paged, dataTypes, formats, shouldReplaceEmpty);
             
             setDisplayData(formatted);
             setDataCount(filteredData.length);
@@ -48,30 +49,31 @@ const TableComponent = ({
         setLoading(false);
 	}
 
-    function handleFormatAdded(settings) {
-        setFormats({ ...settings });
-	}
-
-	function handleClearAllFormatting() {
-		setFormats([]);
+    function handleFormatApplied(formatOptions) {
+        setFormats({ ...formatOptions });
+    }
+    
+    function handleFilterApplied(filter) {
+        setFilter({ ...filter });
+        setPageIndex(0);
 	}
 	
-	function handleShowAll() {
+	function handleShowAllChanged() {
         setShowAll(prevValue => {
 			return !prevValue;
 		});
 	}
 
-	function handleReplaceEmpty() {
+	function handleReplaceEmptyChanged() {
 		setShouldReplaceEmpty(prevValue => {
 			return !prevValue;
 		});
-	}
-
-	function handleFilter(filter) {
-        setFilter({ ...filter });
+    }
+    
+    function handlePageCountChanged(itemsPerPageCount) {
+        setItemsPerPage(itemsPerPageCount);
         setPageIndex(0);
-	}
+    }
 
 	function handleSort({ target: { text: key }}) {
         if (!sorting || sorting.key !== key) {
@@ -88,7 +90,7 @@ const TableComponent = ({
         setSorting({ ...sorting });
     }
 
-    function handlePageChange(pageIndex) {
+    function handlePageIndexChange(pageIndex) {
         setPageIndex(pageIndex);
     }
 
@@ -99,26 +101,34 @@ const TableComponent = ({
             ) : (
                 <>
                     <TableSettings
-                        types={types}
-                        headers={filteredHeaders}
-                        onFilter={handleFilter}
-                        onShowAll={handleShowAll}
-                        onFormat={handleFormatAdded}
-                        onFormatClear={handleClearAllFormatting}
-                        onReplaceEmpty={handleReplaceEmpty} />
+                        dataTypes={dataTypes}
+                        dataHeaders={filteredHeaders}
+                        formatOptions={formats}
+                        itemsPerPage={itemsPerPage}
+                        onFilterApplied={handleFilterApplied}
+                        onFormatApplied={handleFormatApplied}
+                        onShowAllChanged={handleShowAllChanged}
+                        onPageCountChange={handlePageCountChanged}
+                        onReplaceEmptyChanged={handleReplaceEmptyChanged} />
                     <Table
-                        headers={filteredHeaders}
-                        columns={displayData}
+                        dataHeaders={filteredHeaders}
+                        dataColumns={displayData}
                         sorting={sorting}
                         dataCount={dataCount}
-                        itemsPerPage={itemsPerPage}
                         pageIndex={pageIndex}
+                        itemsPerPage={itemsPerPage}
                         onHeaderClick={handleSort}
-                        onPageChange={handlePageChange} />
+                        onPageIndexChange={handlePageIndexChange} />
                 </>
             )}
         </>
     );
+};
+
+TableComponent.propTypes = {
+    dataTypes: PropTypes.object.isRequired,
+	dataHeaders: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired
 };
 
 export default React.memo(TableComponent);

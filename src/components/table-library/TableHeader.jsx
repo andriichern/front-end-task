@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as sortOrder from  '../../utils/sortingOrder';
 
 const TableHeader = ({
@@ -28,5 +29,11 @@ const TableHeader = ({
         </th>
     );
 }
+
+TableHeader.propTypes = {
+    header: PropTypes.string.isRequired,
+    sorting: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired
+};
 
 export default React.memo(TableHeader);

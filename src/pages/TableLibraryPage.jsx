@@ -17,7 +17,7 @@ const TableLibraryPage = ({
 			{data.length > 0 &&
 				<TableComponent
 					data={data}
-					types={types}
+					dataTypes={types}
 					dataHeaders={headers} />
 			}
 		</>

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Button from '../common/Button.jsx';
 import Dropdown from '../common/Dropdown.jsx';
 import { typeFormatOptions } from '../../services/formatService';
 
 const TableDataFormat = ({
-    types,
-    headers,
-    onFormat,
-    onClearAll
+    dataTypes,
+    dataHeaders,
+    formatOptions,
+    onFormatApplied
 }) => {
     const [column, setColumn] = useState('');
     const [format, setFormat] = useState({});
-    const [formatOptions, setFormatOptions] = useState({});
     const [formatApplied, setFormatApplied] = useState(false);
     
     function onColumnSelected({ target: { text }}) {
@@ -23,22 +23,21 @@ const TableDataFormat = ({
         setFormat(text);
     }
 
-    function onFormatApplied() {
+    function onApplyBtnClick() {
         const options = {
             ...formatOptions,
             [column]: format            
         };
         setFormatApplied(true);
-        setFormatOptions(options);
-        onFormat(options);
+        onFormatApplied(options);
     }
 
-    function onClearAllBtn() {
+    function onClearAllBtnClick() {
         setColumn('');
         setFormat('');
         setFormatOptions({});
         setFormatApplied(false);
-        onClearAll();
+        onFormatApplied({});
     }
 
     return(
@@ -48,7 +47,7 @@ const TableDataFormat = ({
                 btnTypeClass="outline-primary"
                 content="dataType"
                 selected={column}
-                values={headers}
+                values={dataHeaders}
                 onItemSelect={onColumnSelected} />
             {column !== '' && 
                 <Dropdown 
@@ -56,21 +55,29 @@ const TableDataFormat = ({
                     btnTypeClass="outline-primary"
                     content="dataFormat"
                     selected={format || formatOptions[column]}
-                    values={typeFormatOptions[types[column]]}
+                    values={typeFormatOptions[dataTypes[column]]}
                     onItemSelect={onColumnonFormatSelected} />
             }
             {column !== '' && format !== '' &&
                 <Button
                     btnTypeClass="success"
                     label="Apply"
-                    onClick={onFormatApplied} />
+                    onClick={onApplyBtnClick} />
             }
-            {formatApplied && <Button
-                btnTypeClass="danger"
-                label="Clear All"
-                onClick={onClearAllBtn} />}
+            {formatApplied &&
+                <Button
+                    btnTypeClass="danger"
+                    label="Clear All"
+                    onClick={onClearAllBtnClick} />}
         </div>
     );
+};
+
+TableDataFormat.propTypes = {
+    dataTypes: PropTypes.object.isRequired,
+	dataHeaders: PropTypes.array.isRequired,
+    formatOptions: PropTypes.object.isRequired,
+    onFormatApplied: PropTypes.func.isRequired
 };
 
 export default React.memo(TableDataFormat);

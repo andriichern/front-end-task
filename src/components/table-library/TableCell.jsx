@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const TableCell = ({ value }) => {
 
@@ -15,4 +16,8 @@ const TableCell = ({ value }) => {
     );
 };
 
-export default TableCell;
+TableCell.propTypes = {
+    value: PropTypes.any
+};
+
+export default React.memo(TableCell);

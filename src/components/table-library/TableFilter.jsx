@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import operators from '../../utils/filterOperators';
 import Dropdown from '../common/Dropdown.jsx';
 import Button from '../common/Button.jsx';
 
-const TableFilter = ({ headers, onFilter }) => {
+const TableFilter = ({
+    dataHeaders,
+    onFilterApplied
+}) => {
     const [key, setFilterKey] = useState('');
     const [operator, setFilterOperator] = useState('');
     const [criteria, setFilterCriteria] = useState('');
@@ -24,11 +28,11 @@ const TableFilter = ({ headers, onFilter }) => {
         setFilterKey('');
         setFilterOperator('');
         setFilterCriteria('');
-        onFilter({});
+        onFilterApplied({});
     }
     
     function onFilterClick() {
-        onFilter({ key, operator, criteria });
+        onFilterApplied({ key, operator, criteria });
     }
 
     return(
@@ -39,7 +43,7 @@ const TableFilter = ({ headers, onFilter }) => {
                     btnTypeClass="outline-info"
                     content="FilterKey"
                     selected={key}
-                    values={headers}
+                    values={dataHeaders}
                     onItemSelect={onFilterKeySelect} />
                 <Dropdown
                     label="Operator"
@@ -68,6 +72,11 @@ const TableFilter = ({ headers, onFilter }) => {
             </div>
         </div>
     );
+};
+
+TableFilter.propTypes = {
+    dataHeaders: PropTypes.array.isRequired,
+    onFilterApplied: PropTypes.func.isRequired
 };
 
 export default React.memo(TableFilter);

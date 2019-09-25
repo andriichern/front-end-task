@@ -5,20 +5,20 @@ import TableHeader from './TableHeader.jsx';
 import TablePager from './TablePager.jsx';
 
 const Table = ({
-    headers,
-    columns,
+    dataHeaders,
+    dataColumns,
     sorting,
     dataCount,
+    pageIndex,
     itemsPerPage,
-    pageIndex,    
     onHeaderClick,
-    onPageChange,
+    onPageIndexChange,
 }) => {
     return(
         <table className='table table-hover'>
             <thead>
                 <tr>
-                    {headers.map((header, i) =>
+                    {dataHeaders.map((header, i) =>
                         <TableHeader 
                             key={i}
                             header={header}
@@ -28,11 +28,11 @@ const Table = ({
                 </tr>
             </thead>
             <tbody>        
-                {columns.map((columnObj, i) => 
+                {dataColumns.map((columnObj, i) => 
                     <TableRow 
                         key={i}
                         rowData={columnObj}
-                        dataKeys={headers} />
+                        dataHeaders={dataHeaders} />
                 )}
             </tbody>
             {dataCount >= itemsPerPage && 
@@ -40,10 +40,10 @@ const Table = ({
                     <tr>
                         <TablePager 
                             dataCount={dataCount}
-                            columnCount={headers.length}
+                            columnCount={dataHeaders.length}
                             itemsPerPage={itemsPerPage}
                             currentPageIndex={pageIndex}
-                            onPageChange={onPageChange}
+                            onPageIndexChange={onPageIndexChange}
                         />                    
                     </tr>
                 </tfoot>
@@ -53,8 +53,14 @@ const Table = ({
 }
 
 Table.propTypes = {
-    headers: PropTypes.array.isRequired,
-    columns: PropTypes.array.isRequired,
+    dataHeaders: PropTypes.array.isRequired,
+    dataColumns: PropTypes.array.isRequired,
+    sorting: PropTypes.object.isRequired,
+    dataCount: PropTypes.number.isRequired,
+    pageIndex: PropTypes.number.isRequired,
+    itemsPerPage: PropTypes.number.isRequired,
+    onHeaderClick: PropTypes.func.isRequired,
+    onPageIndexChange: PropTypes.func.isRequired
 };
 
 export default React.memo(Table);

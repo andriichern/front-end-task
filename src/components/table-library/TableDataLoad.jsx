@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '../common/Button.jsx';
 
-const TableDataLoad = ({ loadData100, loadData1000, loadData10000 }) => {
+const TableDataLoad = ({
+    loadData100,
+    loadData1000,
+    loadData10000
+}) => {
     return(
         <div className="row">
             <Button
@@ -18,6 +23,12 @@ const TableDataLoad = ({ loadData100, loadData1000, loadData10000 }) => {
                 onClick={loadData10000} />
         </div>
     );
-}
+};
+
+TableDataLoad.propTypes = {
+    loadData100: PropTypes.func.isRequired,
+    loadData1000: PropTypes.func.isRequired,
+    loadData10000: PropTypes.func.isRequired
+};
 
 export default React.memo(TableDataLoad);

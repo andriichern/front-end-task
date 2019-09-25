@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Checkbox = ({
     name,
@@ -21,4 +22,11 @@ const Checkbox = ({
     );
 };
 
-export default Checkbox;
+Checkbox.propTypes = {
+    name: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    classList: PropTypes.string,
+    onChange: PropTypes.func.isRequired
+};
+
+export default React.memo(Checkbox);

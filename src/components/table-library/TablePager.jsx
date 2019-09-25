@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '../common/Button.jsx';
 
 const TablePager = ({
@@ -6,7 +7,7 @@ const TablePager = ({
     columnCount,
     itemsPerPage,
     currentPageIndex,
-    onPageChange
+    onPageIndexChange
 }) => {
     let pages;
 
@@ -36,18 +37,18 @@ const TablePager = ({
     function onPageBtnClick({ target: { innerText: page } }) {
         const pageNumber = parseInt(page);
 
-        onPageChange(pageNumber - 1);
+        onPageIndexChange(pageNumber - 1);
     }
 
-    function onNextClick() {
+    function onNextBtnClick() {
         if (canGoNext()) {
-            onPageChange(currentPageIndex + 1);
+            onPageIndexChange(currentPageIndex + 1);
         }
     }
 
-    function onPreviousClick() {
+    function onPreviousBtnClick() {
         if (canGoBack()) {
-            onPageChange(currentPageIndex - 1);
+            onPageIndexChange(currentPageIndex - 1);
         }
     }
 
@@ -58,7 +59,7 @@ const TablePager = ({
                     btnTypeClass='light'
                     label='Previous'
                     disabled={!canGoBack()}
-                    onClick={onPreviousClick} />
+                    onClick={onPreviousBtnClick} />
             </td>
             <td colSpan={columnCount - 2}>
                 {[...Array(countPages())].map((page, i) => {
@@ -74,10 +75,18 @@ const TablePager = ({
                     btnTypeClass='light'
                     label='Next'
                     disabled={!canGoNext()}
-                    onClick={onNextClick} />
+                    onClick={onNextBtnClick} />
             </td>
         </>
     );
 };
 
-export default TablePager;
+TablePager.propTypes = {
+    dataCount: PropTypes.number.isRequired,
+    columnCount: PropTypes.number.isRequired,
+    itemsPerPage: PropTypes.number.isRequired,
+    currentPageIndex: PropTypes.number.isRequired,
+    onPageIndexChange: PropTypes.func.isRequired
+};
+
+export default React.memo(TablePager);
